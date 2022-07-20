@@ -1,0 +1,296 @@
+*{
+  margin:0
+}
+body{
+  
+}
+.logo{
+  width:250px
+}
+.container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap:15px;
+  transform:translateY(8vw)
+}
+.auth--input{
+  font-family: 'Roboto Mono', monospace;
+  width:280px;
+  height: 40px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 2px black;
+  padding-left: 20px;
+  font-size: 20px;
+  
+}
+.auth--submit{
+  background-color: rgb(203,32,32);
+  border-width: 0;
+  border-radius: 20px;
+  width:100px;
+  height:50px;
+  color:white;
+  box-shadow: 2px 2px 2px black;
+}
+.top-sinta{
+  position:absolute;
+  top:0;
+  background-color:rgb(158,25,46) ;
+  width:100%;
+  height:10vh;;
+  z-index: -1;
+  
+
+}
+.logout{
+  
+  color:white;
+  background-color: rgb(158,25,46);
+  border-width: 0;
+  float:right;
+  margin:4vh;
+  font-size:15px;
+  
+}
+
+
+.chose--logo{
+  width:200px;
+  margin-left:10vw;
+}
+/* elarifamine1@gmail.com */
+.user--table{
+  
+  margin-top: 10vh;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  
+  justify-content: center;
+}
+.user--table th{
+  padding:2vh 3.2vw;
+}
+.user--table tr{
+  background-color: rgba(176, 149, 149,.3);
+}
+.user--table tr:nth-child(1){
+  background-color: rgb(222, 129, 129);
+}
+
+.users--button{
+  border-width: 0;
+  background-color: rgb(43, 148, 167);
+  padding:5px 10px;
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
+
+}
+.add--users{
+  
+  margin-top: 5vh;
+  display:flex;
+ 
+  flex-direction: column;
+  background-color: rgb(170, 170, 170);
+  
+  width:40vw;
+  margin-left: 30vw;
+  border-radius: 60px;
+  
+  
+
+}
+.add--users-row{
+  margin-top: 5vh;
+  display:flex;
+  align-items: center;
+  
+  
+
+}
+.add--users th{
+  padding:0vw 2vw;
+}
+.add--users input{
+  height:30px;
+  width:70%;
+  display:flex;
+  margin-left:13% ;
+  border-radius: 10px;
+  text-align: center;
+}
+.ktab{
+  padding:2vh 0px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+.centerbutton{
+  margin-left: 45vw;
+  margin-top: 5vh;
+  background-color: rgb(234, 61, 61);
+}
+.add--submit{
+  width:15vw;
+  display: flex;
+  margin-left: 20vw;
+  text-align: center;
+}
+.center--button{
+  
+  margin-left: 16vw;
+  margin-top: 2vh;
+  box-shadow:0 0 0 white;
+  
+}
+.loader {
+
+  text-align: center;
+  width: 100%;
+  position:absolute;
+  top:38vh;
+  left:32vw;
+  overflow: hidden;
+  max-width: 35rem;
+  height: 30rem;
+  margin: 0 auto;
+}
+
+.wait {
+  margin: 5rem 0;
+}
+.iata_code {
+    font-size: 6rem;
+    opacity:0.3;
+  top: 52%;
+  position: absolute;
+  color: #cc3000;
+  }
+.departure_city {
+  left: 0;
+}
+
+.arrival_city {
+  right: 1.5rem;
+}
+
+.plane {
+  position: absolute;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.plane-img {
+  -webkit-animation: spin 2.5s linear infinite;
+  -moz-animation: spin 2.5s linear infinite;
+  animation: spin 2.5s linear infinite;
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+
+.earth-wrapper {
+  position: absolute;
+  margin: 0 auto;
+  width: 100%;
+  padding-top: 2.7rem;
+}
+
+.earth {
+  width: 160px;
+  height: 160px;
+  background: url("https://media.istockphoto.com/vectors/highly-detailed-world-map-vector-id1212074290?k=20&m=1212074290&s=612x612&w=0&h=1f0GWQ7mArPSXIwtLgkH-FtlcodHL0BMk7Sog7S6FWQ=");
+  border-radius: 100%;
+  background-size: 340px;
+  animation: earthAnim 12s infinite linear;
+  margin: 0 auto;
+  border: 1px solid #d3cdcd;
+}
+
+@keyframes earthAnim {
+  0% {background-position-x: -80px;}
+  100% {background-position-x: -340px;}
+}
+
+@media screen and (max-width: 420px) {
+  .departure_city {
+    left: 0;
+    right: 0;
+    top: 30%;
+    position: absolute;
+    margin: 0 auto;
+  }
+  
+  .arrival_city {
+    left: 0%;
+    right: 0;
+    top: 93%;
+    position: absolute;
+    margin: 0 auto;
+  }
+  
+  
+}
+.graybackground{
+  background-color: rgba(150,150,150,.4);
+  
+  position: absolute;
+  width: 100%;
+  height:100%;
+  left:0;
+  top:0;
+}
+.main--container{
+  margin-top: 7vh;
+  margin-left:20vw;
+  width:60vw;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  padding:0 2vw;
+ 
+}
+.pad{
+  padding:1vw;
+ 
+}
+.stop{
+  border-bottom: .1px solid rgb(160, 150, 150);
+}
+.contain--img{
+  display: flex;
+  align-items:center ;
+}
+.center--form{
+margin-top: 2vh;
+display: flex;
+align-items: center;
+flex-direction: column;
+gap: 2vh;
+}
+.arrow-left {
+  position: relative;
+  width: 0; 
+  height: 0; 
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent; 
+  border-right:40px solid rgb(173, 19, 19); 
+  left:10vw;
+  bottom:10vh;
+}

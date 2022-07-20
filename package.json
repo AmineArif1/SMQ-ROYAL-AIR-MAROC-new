@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "cors": "^2.8.5",
+    "formidable": "^2.0.1",
+    "fs": "^0.0.1-security",
+    "stream-browserify": "^3.0.0"
+  }
+}
