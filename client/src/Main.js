@@ -13,13 +13,14 @@ export default function Main(props){
     let [row,setRow]=useState([]);
     let [inputproc,setInputproc]=useState('')
     let [tempo,setTempo]=useState(true)
-    let [id,setId]=useState(null)
-    let [parentid,setParentid]=useState([null])
+    let [idd,setIdd]=useState(null)
     let [yikes,setYikes]=useState([])
-    let [yik,setYik]=useState([])
+    let [hist,setHist]=useState([])
+
+    
     function addproc(id){
         
-        console.log(id)
+    
         if(id==null){
             Axios.post('http://localhost:3002/api/addproc',{
                 
@@ -60,14 +61,23 @@ export default function Main(props){
         }
     }
     function back(){
-        console.log(yikes.splice(yikes.length - 1)) 
+ 
+        Axios.post("http://localhost:3002/api/getprocdos",{ "id":hist[hist.length - 1] })
+        .then((response)=>{setIdd(hist[hist.length-1]);setHist(hist.slice(0, -1));setRow(response.data)})
 
-        Axios.post("http://localhost:3002/api/getprocdos",{ "id":yikes[yikes.length - 1] }).then((response)=>{setRow(response.data)})
-        setYikes(yikes.splice(yikes.length - 1))
+        
+     
+        
+  
+     
+       
+     
+     
+
                  
     }
     function handleClickDelete(event,idtodelete){
-        if(id==null){
+        if(idd==null){
             Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete}).then(()=>{
                 
                 Axios.get("http://localhost:3002/api/getproc",{  }).then((response)=>{setRow(response.data)})   
@@ -79,19 +89,20 @@ export default function Main(props){
         )}
         else{
         Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete}).then(()=>{
-            Axios.post("http://localhost:3002/api/getprocdos",{ "id":id }).then((response)=>{setRow(response.data)})
+            Axios.post("http://localhost:3002/api/getprocdos",{ "id":idd }).then((response)=>{setRow(response.data)})
 
         })}}
-    function tofichier(currentid,parentidd){
-    
-   setYikes([parentidd,...yikes])
-   
-
-    setId(yikes[0])
-   
-    Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":parentidd }).then((response)=>{setRow(response.data)})
+    function tofichier(currentid,x){
+    setIdd(currentid)
+    console.log(idd)
+    setHist([...hist,x]);
+    Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":x }).then((response)=>{setRow(response.data)})
     //    
    }
+
+
+   useEffect(()=>{console.log(hist)},[hist])
+   useEffect(()=>{console.log(idd)},[idd])
         
     
    
@@ -115,7 +126,7 @@ export default function Main(props){
     <div className="center--form">
     <h3>libellé</h3>
     <input type="text" onChange={(e)=>{setInputproc(e.target.value)}}></input>
-    <button type="button" onClick={()=>addproc(id)} className="auth--submit">Confirmer</button>
+    <button type="button" onClick={()=>addproc(idd)} className="auth--submit">Confirmer</button>
     </div>
     {/* <button onClick="addproc" className="auth--submit centerbutton">Ajouter un processus</button> */}
     <div onClick={back} class="arrow-left"></div>
