@@ -18,7 +18,7 @@ export default function Users(props){
     
     function submit(){
        
-        setIsLoading(true);
+    
         Axios.post('http://localhost:3002/api/addUser',{
                 
                 "username":username,
@@ -89,10 +89,7 @@ export default function Users(props){
         //Runs on every render
       },[]);
 
-    if(!props.authorized){
-        return <Redirect to="/"/>
-    }
-    
+  
   
     let idrow=row.map((res)=>{
         
@@ -113,7 +110,7 @@ export default function Users(props){
     return (
     <>
     <Header/>
-    
+   
     
     <table className="user--table   ">
     <tbody>

@@ -182,32 +182,46 @@ app.get("/api/get",(req,res)=>{
 // main
 // getting processus
 app.get("/api/getproc",(req,res)=>{
-  
+  // console.log(req.query.answer)
+  jwt.verify(req.query.answer,'my_secret_key',function(err,data){
+   
+    if(err){
+      res.sendStatus(403);
+    }else{
   const sqlquery="select * from dossier where id_doss is null;";
   db.query(sqlquery,(err,result)=>(
-  res.send(result)))
+  res.send(result))) 
 }
-)
+})})
 // api/getprocdosdad
 app.post("/api/getprocdos",(req,res)=>{
+  console.log(req.body.answer)
+  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+   
+    if(err){
+      res.sendStatus(403);
+    }else{
   let id=req.body.id;
   if(id){
   const sqlquery="select * from dossier where id_doss=?";
   db.query(sqlquery,[id],(err,result)=>{
-  console.log(result)  
+ 
   res.send(result)})}
   else{
     const sqlquery="select * from dossier where id_doss is ?";
     db.query(sqlquery,[id],(err,result)=>{
-    console.log(result)  
+ 
     res.send(result)})
   }
 }
-)
+})})
 // ajouté libellé
 app.post("/api/addproc",(req,res)=>{
- 
-
+  // console.log(req.body.answer)
+  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+    if(err){
+      res.sendStatus(403);
+    }else{
   let proc=req.body.processus;
   let id=req.body.id;
   
@@ -226,8 +240,12 @@ app.post("/api/addproc",(req,res)=>{
     // http://localhost:3002/api/addUser
 
 })
-})
+}})})
 app.post("/api/procdelete",(req,res)=>{
+  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+    if(err){
+      res.sendStatus(403);
+    }else{
     let id=req.body.id;
     db.query(
     "delete from dossier where id_processus=?",
@@ -244,11 +262,14 @@ app.post("/api/procdelete",(req,res)=>{
   
 
 }) }
-)
+})})
 
 app.post("/api/fichiers",(req,res)=>{
   
-  
+  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+    if(err){
+      res.sendStatus(403);
+    }else{
   let id=req.body.id;
 
   db.query(
@@ -267,8 +288,32 @@ app.post("/api/fichiers",(req,res)=>{
 
 
 }) }
-)
+})})
+app.post("/api/getlibelle",(req,res)=>{
+  
+  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+    if(err){
+      res.sendStatus(403);
+    }else{
+  let id=req.body.id;
 
+  db.query(
+  "select libellé from dossier where id_processus=?",
+  [id],
+  (err,result)=>{
+ 
+  if(err){
+    
+    console.log({err:err})
+  }
+  res.send(result)
+ 
+
+
+
+
+}) }
+})})
 
 
 app.listen(3002,()=>{

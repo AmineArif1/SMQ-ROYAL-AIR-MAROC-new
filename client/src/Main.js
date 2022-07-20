@@ -16,23 +16,27 @@ export default function Main(props){
     let [idd,setIdd]=useState(null)
     let [yikes,setYikes]=useState([])
     let [hist,setHist]=useState([])
+    let [source,setSource]=useState(["://"])
+    const [isLoading, setIsLoading] = useState(false);
 
     
     function addproc(id){
-        
+         setIsLoading(true);
     
         if(id==null){
             Axios.post('http://localhost:3002/api/addproc',{
                 
               "processus":inputproc,
-              "id":id
+              "id":id,
+              answer:window.token
+             
 
         }).then((response)=>{
             if(!response.data.message){
                
                 
                 
-                Axios.get("http://localhost:3002/api/getproc",{  }).then((response)=>{setRow(response.data)})   
+                Axios.get("http://localhost:3002/api/getproc",{ params:{answer:window.token} }).then((response)=>{ setIsLoading(false);setRow(response.data)})   
                  
                
         }
@@ -44,14 +48,15 @@ export default function Main(props){
             Axios.post('http://localhost:3002/api/addproc',{
                 
               "processus":inputproc,
-              "id":id
+              "id":id,
+              answer:window.token
 
         }).then((response)=>{
             if(!response.data.message){
                
                 
-                
-                Axios.post("http://localhost:3002/api/getprocdos",{ "id":id }).then((response)=>{setRow(response.data)})
+                setIsLoading(false);
+                Axios.post("http://localhost:3002/api/getprocdos",{ "id":id,"answer":window.token }).then((response)=>{setRow(response.data)})
                  
                
         }
@@ -61,9 +66,10 @@ export default function Main(props){
         }
     }
     function back(){
- 
-        Axios.post("http://localhost:3002/api/getprocdos",{ "id":hist[hist.length - 1] })
-        .then((response)=>{setIdd(hist[hist.length-1]);setHist(hist.slice(0, -1));setRow(response.data)})
+        setIsLoading(true);
+
+        Axios.post("http://localhost:3002/api/getprocdos",{ "id":hist[hist.length - 1],answer:window.token})
+        .then((response)=>{setIdd(hist[hist.length-1]);setSource(source.slice(0,-2));setHist(hist.slice(0, -1)); setIsLoading(false);;setRow(response.data)})
 
         
      
@@ -77,10 +83,11 @@ export default function Main(props){
                  
     }
     function handleClickDelete(event,idtodelete){
+        setIsLoading(true);
         if(idd==null){
-            Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete}).then(()=>{
+            Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete,answer:window.token}).then(()=>{
                 
-                Axios.get("http://localhost:3002/api/getproc",{  }).then((response)=>{setRow(response.data)})   
+                Axios.get("http://localhost:3002/api/getproc",{ params:{answer:window.token} }).then((response)=>{ setIsLoading(false);setRow(response.data)})   
                  
                
         }
@@ -88,36 +95,44 @@ export default function Main(props){
            
         )}
         else{
-        Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete}).then(()=>{
-            Axios.post("http://localhost:3002/api/getprocdos",{ "id":idd }).then((response)=>{setRow(response.data)})
+        Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete,answer:window.token}).then(()=>{
+            Axios.post("http://localhost:3002/api/getprocdos",{ "id":idd, answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
 
         })}}
     function tofichier(currentid,x){
+    setIsLoading(true);
     setIdd(currentid)
-    console.log(idd)
+    Axios.post("http://localhost:3002/api/getlibelle",{ "id":currentid,answer:window.token}).then((response)=>{setSource([...source,response.data[0].libellé,' / '])})
     setHist([...hist,x]);
-    Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":x }).then((response)=>{setRow(response.data)})
+    Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":x,answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
     //    
    }
-
+   function sendusers(){
+    history.push('/Users');
+   }
 
    useEffect(()=>{console.log(hist)},[hist])
    useEffect(()=>{console.log(idd)},[idd])
-        
-    
+   useEffect(()=>{console.log(source)},[source])
+
    
 
     useEffect(() => {
-        
-        Axios.get("http://localhost:3002/api/getproc",{  }).then((response)=>{setRow(response.data)})
+        setIsLoading(true);
+        Axios.get("http://localhost:3002/api/getproc",{params:{answer:window.token}  }).then((response)=>{ setIsLoading(false);setRow(response.data)})
           
        
         //Runs on every render
       },[]);
+      if(!props.authorized){
+        return <Redirect to="/"/>
+    }
+  
     return( 
     <>
     <Header/>
-
+        <button onClick={sendusers} className="send--users">users</button>
+     
     <div className="main--container">
     {row.map((temp)=> (<div className="contain--img stop"> <img src={Img} width="30px"></img>   <div className="pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div> <button type="button" className="users--button" onClick={event => handleClickDelete(event, temp.id_processus)}>Supprimer</button></div>))}
    
@@ -130,5 +145,26 @@ export default function Main(props){
     </div>
     {/* <button onClick="addproc" className="auth--submit centerbutton">Ajouter un processus</button> */}
     <div onClick={back} class="arrow-left"></div>
+    {isLoading &&
+   <>
+   <div className="graybackground"></div>
+   <div class="loader">
+    
+     
+      <div class="plane">
+        <img src="https://zupimages.net/up/19/34/4820.gif" class="plane-img"></img>
+      </div>
+      <div class="earth-wrapper">
+        <div class="earth"></div>
+      </div>  
+
+    </div>
+    
+    </>     }
+  <p>
+  <h4 className="source">{source} </h4>
+
+  </p>
+  
     </>)
  }
