@@ -10,11 +10,16 @@ const secret_key = 'please_store_secret_in_your_environment_file';
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 var formidable = require('formidable');
+const multer=require('multer');
+const path = require("path")
+const { query } = require('express');
+const util=require('util');
+var os = require('os');
+var fs=require('fs')
 
 // middlewares
 // app.use(bodyParser);
 app.use(cookieParser());
-
 
 const db = mysql.createConnection({
 
@@ -27,7 +32,15 @@ const db = mysql.createConnection({
     database:"ramadmin"
  
   });
- 
+const storage=multer.diskStorage({
+  destination:(req,file,cb)=>{
+    cb(null,'public')
+  },
+  filename:(req,file,cb)=>{
+    cb(null,Date.now()+'-'+file.originalname)
+  }
+})
+const upload=multer({storage}).single('file')
 db.connect(function(err) {
     if (err) throw err;
     console.log("Connecté à la base de données MySQL!");
@@ -61,7 +74,6 @@ app.post("/api/login",(req,res)=>{
           token:token
           
         });
-        console.log(token)
         
       }
      
@@ -182,7 +194,6 @@ app.get("/api/get",(req,res)=>{
 // main
 // getting processus
 app.get("/api/getproc",(req,res)=>{
-  // console.log(req.query.answer)
   jwt.verify(req.query.answer,'my_secret_key',function(err,data){
    
     if(err){
@@ -195,7 +206,6 @@ app.get("/api/getproc",(req,res)=>{
 })})
 // api/getprocdosdad
 app.post("/api/getprocdos",(req,res)=>{
-  console.log(req.body.answer)
   jwt.verify(req.body.answer,'my_secret_key',function(err,data){
    
     if(err){
@@ -217,7 +227,6 @@ app.post("/api/getprocdos",(req,res)=>{
 })})
 // ajouté libellé
 app.post("/api/addproc",(req,res)=>{
-  // console.log(req.body.answer)
   jwt.verify(req.body.answer,'my_secret_key',function(err,data){
     if(err){
       res.sendStatus(403);
@@ -314,7 +323,91 @@ app.post("/api/getlibelle",(req,res)=>{
 
 }) }
 })})
+// api upload
+app.post("/api/upload",(req,res)=>{
 
+
+  upload(req,res,(err)=>{
+    if(err){
+     
+    return res.status(500).json(err)}
+    else{
+      let name=req.file.filename;
+      let id=req.body.id
+      if(!id){
+    db.query('insert into fichier(libellé,id_processus) values(?,null)',[name],
+      (err,result)=>{
+     
+      if(err){
+        
+        console.log({err:err})
+      }
+      res.send(result) })
+    }
+    else{
+      db.query('insert into fichier(libellé,id_processus) values(?,?)',[name,id],
+      (err,result)=>{
+     
+      if(err){
+        
+        console.log({err:err})
+      }
+      res.send(result) })
+    }
+    
+    }
+     
+  })
+
+});
+
+app.post("/api/getfile",(req,res)=>{
+ 
+  let id=req.body.id
+  if (id){
+  db.query("select * from fichier where id_processus=?",[id],(err,result)=>{
+    if(!err) return res.send(result)
+    res.send(err)
+  })}
+  else{db.query("select * from fichier where id_processus is ?",[id],(err,result)=>{
+    if(!err) return res.send(result)
+    res.send(err)
+  })}}
+)
+app.get("/api/getfileid",(req,res)=>{
+  db.query("select id_processus from fichier ",(err,result)=>{
+    if(!err) return res.send(result)
+    res.send(err)
+  })
+})
+app.get('/api/download', function(req, res){
+  let name=req.query.filename
+  const file = `${__dirname}/public/${name}`;
+  
+
+ 
+
+  
+ 
+
+
+  res.download(file); // Set disposition and send it.
+  
+});
+app.get("/api/get",(req,res)=>{
+  jwt.verify(req.query.answer,'my_secret_key',function(err,data){
+    if(err){
+      res.sendStatus(403);
+    }else{
+      const sqlquery="select * from users;";
+      db.query(sqlquery,(err,result)=>(
+      res.send(result)))
+    }
+  })
+ 
+  
+
+  })
 
 app.listen(3002,()=>{
     console.log("running on 3002")
