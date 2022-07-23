@@ -2,7 +2,9 @@
   margin:0
 }
 body{
-  
+  background-color: rgb(243,246,253);
+  font-family: 'Nunito', sans-serif;
+
 }
 .logo{
   width:250px
@@ -49,8 +51,8 @@ body{
   background-color: rgb(158,25,46);
   border-width: 0;
   float:right;
-  margin:4vh;
-  font-size:15px;
+  margin:2.5vh;
+  font-size:40px;
   
 }
 
@@ -258,12 +260,15 @@ body{
   top:0;
 }
 .main--container{
-  margin-top: 7vh;
-  margin-left:20vw;
+  background-color: white;
+  padding:4vw;
+  margin-top: 12vh;
+  margin-left:17vw;
   width:60vw;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  padding:0 2vw;
+  border-radius: 30px;
+  /* border-left: 1px solid black;
+  border-right: 1px solid black; */
+ 
  
 }
 .pad{
@@ -279,6 +284,12 @@ body{
   justify-content: space-between;
 }
 .center--form{
+  position:absolute;
+  top:10vh;
+  left:25vw;
+  background-color: white;
+  padding:15vw;
+  border-radius: 35px;
 margin-top: 2vh;
 display: flex;
 align-items: center;
@@ -302,15 +313,15 @@ gap: 2vh;
   border-width: 0;
   
   margin:4vh;
-  font-size:15px;
-  top:-0.18vh;
+  font-size:40px;
+  top:-1.5vh;
   right:6vw;
 
 }
 .source{
   position: absolute;
-  top:22vh;
-  left:20vw;
+  top:25vh;
+  left:22vw;
 }
 .files input {
   outline: 2px dashed #92b0b3;
@@ -356,4 +367,69 @@ gap: 2vh;
   font-weight: 600;
   text-transform: capitalize;
   text-align: center;
+}
+.arrow{
+  width: 200px;
+  color:#cc3000;
+  font-size: 50px;
+  position:absolute;
+  top:22vh;
+  left:17vw;
+
+}
+.two{
+  font-size: 2.5vw;
+  cursor: pointer;
+
+}
+.lib{
+font-size: 3vw;
+font-family: 'Courier New', Courier, monospace;
+}
+.quit{
+  position: absolute;
+  top:15vh;
+  left:75vw;
+  z-index: 10;
+  font-size: 3vw;
+  cursor: pointer;
+}
+.quit1{
+  position: absolute;
+  top:15vh;
+  left:70vw;
+  z-index: 10;
+  font-size: 3vw;
+  cursor: pointer;
+}
+.col-md-6{
+  background-color: white;
+  padding:8vw;
+  padding-right: 20vw;
+  left:25vw;
+  position: absolute;
+  top:13vh;
+  border-radius: 40px;
+}
+.quit2{
+  z-index: 200;
+  position:absolute;
+  top:0px;
+}
+.flexcenter{
+  display: flex;
+  display: center;
+  padding:5px 0 5px;
+}
+
+.flexcenter1{
+  display: flex;
+  display: center;
+  justify-content: space-between;
+  padding:0 0 1vw 0;
+
+}
+
+.point{
+  cursor: pointer;
 }

@@ -24,6 +24,8 @@ export default function Main(props){
     let [file,setFile]=useState(null)
     let [fichierow,setFichierow]=useState([])
     let [fileid,setFileid]=useState([])
+    let [transfolder,setTransfolder]=useState(false)
+    let [transfile,setTransfile]=useState(false)
     function addproc(id){
          setIsLoading(true);
     
@@ -40,7 +42,7 @@ export default function Main(props){
                
                 
                 
-                Axios.get("http://localhost:3002/api/getproc",{ params:{answer:window.token} }).then((response)=>{ setIsLoading(false);setRow(response.data)})   
+                Axios.get("http://localhost:3002/api/getproc",{ params:{answer:window.token} }).then((response)=>{setTransfolder(false); setIsLoading(false);setRow(response.data)})   
                  
                
         }
@@ -60,7 +62,7 @@ export default function Main(props){
                
                 
                 setIsLoading(false);
-                Axios.post("http://localhost:3002/api/getprocdos",{ "id":id,"answer":window.token }).then((response)=>{setRow(response.data)})
+                Axios.post("http://localhost:3002/api/getprocdos",{ "id":id,"answer":window.token }).then((response)=>{setTransfolder(false);setRow(response.data)})
                  
                
         }
@@ -158,35 +160,51 @@ export default function Main(props){
        data.append('id',idd)
         axios.post('http://localhost:3002/api/upload',data).then((e)=>{
             toast.success('Envoie terminé');
-            axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})
+            axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setTransfile(false);setFichierow(response.data)})
         })
         .catch((e)=>{
               toast.error('Echec');
             console.error('Error',e)
         })
     }
+    var today  = new Date();
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     function download(name){
         window.open(`http://localhost:3002/api/download?filename=${name}`, '_blank');
         axios.get('http://localhost:3002/api/download',{params:{filename:name}}).then(()=>{})
+    }
+    function transition(){
+        setTransfolder(true)
     }
     return( 
         <>
     <Header/>
     <h4 className="source">{source} </h4>
-        <button onClick={sendusers} className="send--users">users</button>
+    <span onClick={sendusers} class="material-symbols-outlined send--users">
+manage_accounts
+</span>
+   
      
     <div className="main--container">
-    {row.map((temp)=> (<div className="contain--img stop"> <img src={Imgdoss} width="30px"></img>   <div className="pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div> <button type="button" className="users--button" onClick={event => handleClickDelete(event, temp.id_processus)}>Supprimer</button></div>))}
-    {fichierow.map((temp)=>(( <div className="contain--img stop"> <img src={Imgfile} width="30px"></img>   <div className="pad" onClick={()=>(download(temp.libellé))}>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><button type="button" className="users--button" onClick={event => handleClickDeleteFile(event, temp.id_fichier)}>Supprimer</button></div>)))}
+   <div className="flexcenter1"><div><span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span><span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
+file_upload
+</span></div>
+<h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
+</div> 
+
+    {row.map((temp)=> (<div className="contain--img stop"> <img src={Imgdoss} width="30px"></img>   <div className="pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div> <div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point">
+delete
+</span></div></div>))}
+    {fichierow.map((temp)=>(( <div className="contain--img stop"> <img src={Imgfile} width="30px"></img>  <div>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point">
+download
+</div><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point">
+delete
+</span></div></div></div>)))}
 
     </div>
-    <div className="center--form">
-    <h3>libellé</h3>
-    <input type="text" onChange={(e)=>{setInputproc(e.target.value)}}></input>
-    <button type="button" onClick={()=>addproc(idd)} className="auth--submit">Confirmer</button>
-    </div>
+  
     {/* <button onClick="addproc" className="auth--submit centerbutton">Ajouter un processus</button> */}
-    <div onClick={back} class="arrow-left"></div>
+ 
     {isLoading &&
    <>
    
@@ -205,14 +223,33 @@ export default function Main(props){
     
     </>     }
 
-   
+{transfile &&
+<>
+
+    <div className="graybackground"></div>
+    <span onClick={()=>setTransfile(false)} class="material-symbols-outlined quit">
+cancel
+</span>
     <div class="col-md-6">
+        
 <form method="post" action="#" id="#" onSubmit={onSubmit}> 
 <div class="form-group files">
        <input class="form-control" type="file" onChange={onInputChange} multiple="" required/> 
        <button >submit </button>
  </div>
 </form>
-</div>
+</div></>}
+<span onClick={back} className="arrow">&#10229;</span>
+
+{transfolder && <>
+<div className="graybackground"></div>
+<span onClick={()=>setTransfolder(false)} class="material-symbols-outlined quit1">
+cancel
+</span>
+ <div className="center--form">
+ <h3 className="lib">libellé</h3>
+ <input className="auth--input" type="text" onChange={(e)=>{setInputproc(e.target.value)}}></input>
+ <button type="button" onClick={()=>addproc(idd)} className="auth--submit point">Confirmer</button>
+ </div></>}
     </>)
  }
