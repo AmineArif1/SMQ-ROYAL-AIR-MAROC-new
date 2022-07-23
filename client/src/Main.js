@@ -7,6 +7,7 @@ import Imgdoss from './img/folder.png'
 import Imgfile from './img/file.png'
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 export default function Main(props){
    
@@ -112,6 +113,16 @@ export default function Main(props){
     Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":x,answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
     axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})     
    }
+   function handleClickDeleteFile(event,idtodelete){
+    // setIsLoading(true);
+   
+    Axios.post("http://localhost:3002/api/filedelete",{"id":idtodelete,answer:window.token}).then(()=>{
+        axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)}) 
+
+    })}
+
+
+
    function sendusers(){
     history.push('/Users');
    }
@@ -139,16 +150,18 @@ export default function Main(props){
     function onInputChange(e){
         setFile(e.target.files[0])
     }
-   const onSubmit=(e)=>{
+   const onSubmit=(e)=>{    
       
         e.preventDefault();
         const data =new FormData();
         data.append('file',file)
        data.append('id',idd)
         axios.post('http://localhost:3002/api/upload',data).then((e)=>{
-            axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})  
+            toast.success('Envoie terminé');
+            axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})
         })
         .catch((e)=>{
+              toast.error('Echec');
             console.error('Error',e)
         })
     }
@@ -164,7 +177,7 @@ export default function Main(props){
      
     <div className="main--container">
     {row.map((temp)=> (<div className="contain--img stop"> <img src={Imgdoss} width="30px"></img>   <div className="pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div> <button type="button" className="users--button" onClick={event => handleClickDelete(event, temp.id_processus)}>Supprimer</button></div>))}
-    {fichierow.map((temp)=>(( <div className="contain--img stop"> <img src={Imgfile} width="30px"></img>   <div className="pad" onClick={()=>(download(temp.libellé))}>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div></div>)))}
+    {fichierow.map((temp)=>(( <div className="contain--img stop"> <img src={Imgfile} width="30px"></img>   <div className="pad" onClick={()=>(download(temp.libellé))}>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><button type="button" className="users--button" onClick={event => handleClickDeleteFile(event, temp.id_fichier)}>Supprimer</button></div>)))}
 
     </div>
     <div className="center--form">
@@ -193,12 +206,13 @@ export default function Main(props){
     </>     }
 
    
-
+    <div class="col-md-6">
 <form method="post" action="#" id="#" onSubmit={onSubmit}> 
-       <input type="file" onChange={onInputChange} multiple="" required/> 
+<div class="form-group files">
+       <input class="form-control" type="file" onChange={onInputChange} multiple="" required/> 
        <button >submit </button>
-   
+ </div>
 </form>
-  
+</div>
     </>)
  }

@@ -334,7 +334,7 @@ app.post("/api/upload",(req,res)=>{
     else{
       let name=req.file.filename;
       let id=req.body.id
-      if(!id){
+      if(id=='null'){
     db.query('insert into fichier(libellé,id_processus) values(?,null)',[name],
       (err,result)=>{
      
@@ -404,10 +404,59 @@ app.get("/api/get",(req,res)=>{
       res.send(result)))
     }
   })
- 
+  })
+  
+  app.post("/api/filedelete",(req,res)=>{
+    
+    let id=req.body.id;
+
+    db.query(
+      "select libellé from fichier where id_fichier=?",
+      [id],
+      (err,result)=>{
+        try {
+          console.log(result)
+          fs.unlinkSync(`${__dirname}/public/${result[0].libellé}`)
+          //file removed
+        } catch(err) {
+          console.error(err)
+        }
   
 
+
+    //   }
+    //  )
+    })
+
+
+
+    db.query(
+    "delete from fichier where id_fichier=?",
+    [id],
+    (err,result)=>{
+   
+    if(err){
+      
+      console.log({err:err})
+    }
+    res.send(result)
   })
+   
+// try {
+//   fs.unlinkSync(path)
+//   //file removed
+// } catch(err) {
+//   console.error(err)
+// }
+  
+  
+  
+
+}) 
+
+
+
+
 
 app.listen(3002,()=>{
     console.log("running on 3002")
