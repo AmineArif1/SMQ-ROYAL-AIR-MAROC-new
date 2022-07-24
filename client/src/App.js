@@ -15,8 +15,8 @@ function App() {
     <Switch>
  
       <Route exact path="/" component={Auth}/>
-      <Route exact path="/Users" component={()=><Users authorized={authorized}/>}/>
-      <Route exact path="/Main/" component={()=><Main authorized={authorized}/>}/>
+      <Route exact path="/Users/:id" component={()=><Users authorized={authorized}/>}/>
+      <Route exact path="/Main/:userid" component={()=><Main authorized={authorized}/>}/>
       <Route exact path="/fichier/:id" component={()=><Fichier authorized={authorized}/>}/>
     </Switch>
    </Router>

@@ -1,4 +1,4 @@
-import { Redirect,useNavigate } from "react-router-dom"
+import { useParams,Redirect,useNavigate } from "react-router-dom"
 
 import {useEffect, useState,createContext} from 'react'
 import Header from './Header'
@@ -26,6 +26,10 @@ export default function Main(props){
     let [fileid,setFileid]=useState([])
     let [transfolder,setTransfolder]=useState(false)
     let [transfile,setTransfile]=useState(false)
+    let {userid}=useParams();
+    let [userproc,setUserproc]=useState()
+    let [isadmin,setIsadmin]=useState();
+
     function addproc(id){
          setIsLoading(true);
     
@@ -126,29 +130,30 @@ export default function Main(props){
 
 
    function sendusers(){
-    history.push('/Users');
+    history.push(`/Users/${userid}`);
    }
 
    useEffect(()=>{console.log(hist)},[hist])
    useEffect(()=>{console.log(idd)},[idd])
    useEffect(()=>{console.log(source)},[source])
-
-   
-
+   useEffect(()=>{console.log(userproc)},[userproc])
     useEffect(() => {
         setIsLoading(true);
         Axios.get("http://localhost:3002/api/getproc",{params:{answer:window.token}  }).then((response)=>{ setIsLoading(false);setRow(response.data)})
-       
+        axios.get('http://localhost:3002/api/userproc',{params:{userid:userid}}).then((response)=>{setUserproc(response.data[0].id_processus)})
+        axios.get('http://localhost:3002/api/isadmin',{params:{userid:userid}}).then((response)=>{response.data[0].statut==0 ? setIsadmin(false) : setIsadmin(true)})
        
         //Runs on every render
       },[]);
       useEffect(() => {
         axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})  
       },[idd])
+      useEffect(()=>{console.log(userproc)},[userproc])
       
       if(!props.authorized){
         return <Redirect to="/"/>
     }
+  
     function onInputChange(e){
         setFile(e.target.files[0])
     }
@@ -167,6 +172,8 @@ export default function Main(props){
             console.error('Error',e)
         })
     }
+    console.log(userproc+"ajahahahahahaahhaahh")
+    let temp=idd!=null && idd==userproc;
     var today  = new Date();
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     function download(name){
@@ -180,26 +187,27 @@ export default function Main(props){
         <>
     <Header/>
     <h4 className="source">{source} </h4>
-    <span onClick={sendusers} class="material-symbols-outlined send--users">
+  {isadmin &&  <span onClick={sendusers} class="material-symbols-outlined send--users">
 manage_accounts
-</span>
+</span>}
    
      
     <div className="main--container">
-   <div className="flexcenter1"><div><span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span><span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
+
+   <div className="flexcenter1"><div>{(idd!=null && idd==userproc)   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{idd!=null && idd==userproc  && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
 file_upload
-</span></div>
+</span>}</div>
 <h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
 </div> 
 
-    {row.map((temp)=> (<div className="contain--img stop"> <img src={Imgdoss} width="30px"></img>   <div className="pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div> <div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point">
+    {row.map((temp)=> (<div className={(!(idd==null) ) ? "contain--img stop" : "aligncenter stop"}> <img src={Imgdoss} width="30px"></img>   <div className={!(idd==null)  ? "pad" : "lol pad"} onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div>{idd!=null  && idd==userproc   && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point">
 delete
-</span></div></div>))}
-    {fichierow.map((temp)=>(( <div className="contain--img stop"> <img src={Imgfile} width="30px"></img>  <div>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point">
+</span></div></>}</div>))}
+    {fichierow.map((temp)=>(( <div className={(!temp ) ? "contain--img stop" : "aligncenter stop"}> <img src={Imgfile} width="30px"></img>  <div>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point">
 download
-</div><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point">
+</div>{idd!=null && idd==userproc   && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point">
 delete
-</span></div></div></div>)))}
+</span></div></>}</div></div>)))}
 
     </div>
   

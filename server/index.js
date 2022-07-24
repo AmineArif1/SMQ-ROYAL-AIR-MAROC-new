@@ -54,7 +54,7 @@ app.post("/api/login",(req,res)=>{
     let username=req.body.username;
    
     db.query(
-      "select id from users where email=? and password=? and statut=1",
+      "select id from users where email=? and password=? ",
       [username,password],
       (err,result)=>{
      
@@ -71,8 +71,8 @@ app.post("/api/login",(req,res)=>{
           { user },
           "my_secret_key");
         res.json({
-          token:token
-          
+          token:token,
+          result:result
         });
         
       }
@@ -91,11 +91,13 @@ app.post("/api/addUser",(req,res)=>{
   let username=req.body.username;
   let nom=req.body.nom;
   let prenom=req.body.prenom;
+  let processus=req.body.processus;
 
-  
+
   db.query(
-    "insert into users(email,password,nom,prenom) values(?,?,?,?)",
-    [username,password,nom,prenom],
+    "insert into dossier(libellé,id_doss) values(?,null)",
+    [processus],
+    
     (err,result)=>{
    
     if(err){
@@ -103,10 +105,39 @@ app.post("/api/addUser",(req,res)=>{
       console.log({err:err})
       res.send(err)
     }
-    res.send(result)
-    // http://localhost:3002/api/addUser
+   })
+   db.query(
+    "select id_processus from  dossier where libellé like ?",
+    [processus],
+    
+    (err,result)=>{
+   
+    if(err){
+      
+      console.log({err:err})
+      res.send(err)
+    }
+    db.query(
+      "insert into users(email,password,nom,prenom,id_processus) values(?,?,?,?,?)",
+      [username,password,nom,prenom,result[0].id_processus],
+      (err,result)=>{
+      console.log("this")
+      if(err){
+        
+        console.log({err:err})
+        res.send(err)
+      }
+      res.send(result)
+      // http://localhost:3002/api/addUser
+  
+  })
+    
+   }
+   )
+   
+   
+  
 
-})
 }})}) 
 
 app.post("/api/delete",(req,res)=>{
@@ -454,6 +485,15 @@ app.get("/api/get",(req,res)=>{
 
 }) 
 
+// /api/userproc
+app.get('/api/userproc',(req,res)=>{
+  let id=req.query.userid
+  db.query('select id_processus from users where id = ?',[id],(err,result)=>{res.send(result)})
+})
+app.get('/api/isadmin',(req,res)=>{
+  let id=req.query.userid
+  db.query('select statut from users where id = ?',[id],(err,result)=>{res.send(result)})
+})
 
 
 
