@@ -91,7 +91,7 @@ body{
 .add--users{
   position: absolute;
   top: 20vh;
-
+  padding:20px 0;
   display:flex;
  
   flex-direction: column;
@@ -298,6 +298,7 @@ flex-direction: column;
 gap: 2vh;
 }
 .arrow-left {
+  cursor: pointer;
   position: relative;
   width: 0; 
   height: 0; 
@@ -306,6 +307,7 @@ gap: 2vh;
   border-right:40px solid rgb(173, 19, 19); 
   left:10vw;
   bottom:10vh;
+
 }
 .send--users{
   position: absolute;
@@ -403,6 +405,13 @@ font-family: 'Courier New', Courier, monospace;
   font-size: 3vw;
   cursor: pointer;
 }
+.quit3{
+  position: absolute;
+  top:3vh;
+  left:35vw;
+ 
+  font-size: 40px;
+}
 .col-md-6{
   background-color: white;
   padding:8vw;
@@ -433,6 +442,7 @@ font-family: 'Courier New', Courier, monospace;
 
 .point{
   cursor: pointer;
+
 }
 
 .aligncenter{
@@ -440,5 +450,24 @@ font-family: 'Courier New', Courier, monospace;
  align-items: center;
 }
 .lol{
-  padding-left: 20vw;
+  padding-left: 22vw;
 }
+.topbottompad{
+  padding:1vh 0vw;
+}
+.icon{
+  position:absolute;
+  top:48vh;
+  left:80vw;
+}
+.this1{
+  position:absolute;
+  top:55vh;
+  left:80vw;
+}
+.this2{
+  position:absolute;
+  top:55vh;
+  left:78.5vw;
+}
+

@@ -1,0 +1,75 @@
+body{
+    margin:0px;
+}
+.sidebar{
+    width:18vw;
+    height: 100vh;
+    position: fixed;
+  
+  }
+  
+  .sidebar--list{
+   
+    margin-top: 60px;
+    list-style-type: none;
+    transform: translateX(-2.6vw);
+    /* padding:2vh ; */
+  }
+  .sidebar--list li{
+    
+   
+    width: 100%;
+    /* padding:0; */
+    background: linear-gradient(to right, rgba(228, 80, 80, 0.4) 0%, rgb(243,246,253) 100%);
+    display: flex;
+    align-items: center;
+    padding: 2vh;
+    margin-left:0px;
+    transform: translateY(6px);
+    margin-bottom: 20px;
+  }
+  .bef{
+  height: 8.5vh;
+  background-color:  rgba(183, 0, 0, 0.8) ;
+  width:25px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  }
+  .flexo{
+    display: flex;
+    
+  }
+  .scale{
+
+    transform: scale(1.1);
+  }
+  .tableproc{
+    position: relative;
+   top:25vh;
+   left:20vw;
+    background-color: white;
+    padding:2vw;
+
+  }
+  .tableproc th{
+    padding:2vh;
+    
+
+  }
+  .tableproc tr:nth-child(1){
+    background-color: rgba(235, 49, 49,.9);
+  }
+  .tableproc th:nth-child(3){
+    width: 20vw;
+  }
+  .tableproc th:nth-child(2){
+    width: 20vw;
+  }
+  .tableproc th:nth-child(4){
+    width: 10vw;
+  }
+  .plus{
+    position: relative;
+    left:28vw;
+    font-size: 30px;
+  }

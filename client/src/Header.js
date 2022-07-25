@@ -15,7 +15,7 @@ export default function Header(){
             <div className='top-sinta'>
             
             </div>
-            <span onClick={click} class="material-symbols-outlined logout">
+            <span onClick={click} class="material-symbols-outlined logout point">
 logout
 </span>
      

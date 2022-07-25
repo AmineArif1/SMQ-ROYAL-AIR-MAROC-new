@@ -29,6 +29,8 @@ export default function Main(props){
     let {userid}=useParams();
     let [userproc,setUserproc]=useState()
     let [isadmin,setIsadmin]=useState();
+    let [boolfich,setBoolFich]=useState(false)
+    let [entrance,setEntrance]=useState()
 
     function addproc(id){
          setIsLoading(true);
@@ -80,7 +82,13 @@ export default function Main(props){
         axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})  
         Axios.post("http://localhost:3002/api/getprocdos",{ "id":hist[hist.length - 1],answer:window.token})
         .then((response)=>{setIdd(hist[hist.length-1]);setSource(source.slice(0,-2));setHist(hist.slice(0, -1)); setIsLoading(false);;setRow(response.data)})
-
+        
+     
+            console.log(userproc)
+            console.log(entrance)
+         
+            setBoolFich(false)
+        
         
      
         
@@ -134,9 +142,9 @@ export default function Main(props){
    }
 
    useEffect(()=>{console.log(hist)},[hist])
-   useEffect(()=>{console.log(idd)},[idd])
+   useEffect(()=>{condition()},[idd])
    useEffect(()=>{console.log(source)},[source])
-   useEffect(()=>{console.log(userproc)},[userproc])
+   useEffect(()=>{console.log('ROCK AND ROLL')},[userproc])
     useEffect(() => {
         setIsLoading(true);
         Axios.get("http://localhost:3002/api/getproc",{params:{answer:window.token}  }).then((response)=>{ setIsLoading(false);setRow(response.data)})
@@ -172,6 +180,12 @@ export default function Main(props){
             console.error('Error',e)
         })
     }
+    const condition = ()=>{
+    if(idd!=null && idd==userproc){
+        setEntrance(idd)
+        setBoolFich(true)
+        
+    }}
     console.log(userproc+"ajahahahahahaahhaahh")
     let temp=idd!=null && idd==userproc;
     var today  = new Date();
@@ -187,25 +201,25 @@ export default function Main(props){
         <>
     <Header/>
     <h4 className="source">{source} </h4>
-  {isadmin &&  <span onClick={sendusers} class="material-symbols-outlined send--users">
+  {isadmin &&  <span onClick={sendusers} class="material-symbols-outlined send--users point">
 manage_accounts
 </span>}
    
      
     <div className="main--container">
 
-   <div className="flexcenter1"><div>{(idd!=null && idd==userproc)   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{idd!=null && idd==userproc  && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
+   <div className="flexcenter1"><div>{(boolfich || (idd!=null && isadmin==true) )   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{(boolfich || (idd!=null && isadmin==true) ) && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
 file_upload
 </span>}</div>
 <h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
 </div> 
 
-    {row.map((temp)=> (<div className={(!(idd==null) ) ? "contain--img stop" : "aligncenter stop"}> <img src={Imgdoss} width="30px"></img>   <div className={!(idd==null)  ? "pad" : "lol pad"} onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div>{idd!=null  && idd==userproc   && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point">
+    {row.map((temp)=> (<div className="aligncenter stop"> <img src={Imgdoss} width="30px"></img>   <div className="lol pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div>{(boolfich || (idd!=null && isadmin==true) )    && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point icon">
 delete
 </span></div></>}</div>))}
-    {fichierow.map((temp)=>(( <div className={(!temp ) ? "contain--img stop" : "aligncenter stop"}> <img src={Imgfile} width="30px"></img>  <div>{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point">
+    {fichierow.map((temp)=>(( <div className="aligncenter stop topbottompad"> <img src={Imgfile} width="30px"></img>  <div className="lol pad">{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point this1">
 download
-</div>{idd!=null && idd==userproc   && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point">
+</div>{(boolfich || (idd!=null && isadmin==true) )   && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point this2">
 delete
 </span></div></>}</div></div>)))}
 

@@ -4,6 +4,7 @@ import {Auth,authorized} from './Auth'
 import Users from './Users'
 import Main from './Main'
 import Fichier from './Fichier'
+import Admin from './Admin'
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom"
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify';
@@ -18,6 +19,7 @@ function App() {
       <Route exact path="/Users/:id" component={()=><Users authorized={authorized}/>}/>
       <Route exact path="/Main/:userid" component={()=><Main authorized={authorized}/>}/>
       <Route exact path="/fichier/:id" component={()=><Fichier authorized={authorized}/>}/>
+      <Route exact path="/Admin/" component={()=><Admin authorized={authorized}/>}/>
     </Switch>
    </Router>
   );

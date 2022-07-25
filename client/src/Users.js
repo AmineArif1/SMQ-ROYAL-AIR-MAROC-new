@@ -13,6 +13,7 @@ export default function Users(props){
     let [token,setToken]=useState('');
     let [processus,setProcessus]=useState('');
     const [isLoading, setIsLoading] = useState(false);
+
     let {id}=useParams();
     let [buttonAdd,setbuttonAdd]=useState(true)
     
@@ -35,6 +36,7 @@ export default function Users(props){
                 
                 Axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
                 setIsLoading(false);    
+                setbuttonAdd(true)
                 setRow(response.data)})
                  
                
@@ -144,7 +146,10 @@ export default function Users(props){
        <div className="ktab">Nom :</div><input className="add--input" type="text" onChange={(e)=>{setNom(e.target.value)}}></input>
        <span className="ktab">Prenom :</span> <input className="add--input" type="text" onChange={(e)=>{setPrenom(e.target.value)}}></input>
        <span className="ktab">Processus :</span> <input className="add--input" type="text" onChange={(e)=>{setProcessus(e.target.value)}}></input>
-           <button className="auth--submit center--button" onClick={submit} >Confirmer</button>,
+           <button className="auth--submit center--button" onClick={submit} >Confirmer</button>
+           <span onClick={()=>setbuttonAdd(true)} class="material-symbols-outlined quit3 point">
+cancel
+</span>
 
            
    </div> </>}
@@ -163,9 +168,10 @@ export default function Users(props){
 
     </div>
     </>     }
-    <span onClick={sendmain} class="material-symbols-outlined send--users">
+    <span onClick={sendmain} class="material-symbols-outlined send--users point">
 home
 </span>
+
     </> 
     )
 }

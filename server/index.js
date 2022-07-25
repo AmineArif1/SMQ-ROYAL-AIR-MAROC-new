@@ -145,7 +145,11 @@ app.post("/api/delete",(req,res)=>{
     if(err){
       res.sendStatus(403);
     }else{
+    
     let id=req.body.id;
+    db.query("select id_processus from users where id=?",[id],(err,result)=>{
+     db.query("delete from dossier where id_processus = ?",[result[0].id_processus])
+    })
     db.query(
     "delete from users where id=?",
     [id],
@@ -493,6 +497,9 @@ app.get('/api/userproc',(req,res)=>{
 app.get('/api/isadmin',(req,res)=>{
   let id=req.query.userid
   db.query('select statut from users where id = ?',[id],(err,result)=>{res.send(result)})
+})
+app.get('/api/processusget',(req,res)=>{
+  db.query('select * from processus',(err,result)=>{res.send(result)})
 })
 
 
