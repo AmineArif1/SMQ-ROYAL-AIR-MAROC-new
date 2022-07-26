@@ -170,19 +170,20 @@ app.post("/api/delete",(req,res)=>{
 
 
 app.get("/api/get",(req,res)=>{
-    jwt.verify(req.query.answer,'my_secret_key',function(err,data){
-      if(err){
-        res.sendStatus(403);
-      }else{
+    // jwt.verify(req.query.answer,'my_secret_key',function(err,data){
+    //   if(err){
+    //     res.sendStatus(403);
+    //   }else{
         const sqlquery="select * from users;";
         db.query(sqlquery,(err,result)=>(
         res.send(result)))
       }
-    })
+    // }
+    )
    
     
   
-    })
+    // })
   app.post("/api/Yadmin",(req,res)=>{
     jwt.verify(req.body.answer,'my_secret_key',function(err,data){
       if(err){
@@ -499,11 +500,66 @@ app.get('/api/isadmin',(req,res)=>{
   db.query('select statut from users where id = ?',[id],(err,result)=>{res.send(result)})
 })
 app.get('/api/processusget',(req,res)=>{
-  db.query('select * from processus',(err,result)=>{res.send(result)})
+  let id=req.query.id_user
+  db.query('select * from processus p,users u where u.id=p.id_user ',(err,result)=>{
+    // db.query('select concat(nom," ",prenom) as "come" from users where id = ?',[id],(err,result)=>{console.log(result);res.json({"one":result1,"two":result})})
+    if(err) console.log(err)
+    res.send(result)
+  })
 })
+// /api/processusmodif
 
+app.get('/api/processusgettemp',(req,res)=>{
+  let id=req.query.id_proc
+  db.query('select * from processus p,users u where u.id=p.id_user and id_proc=?',[id],(err,result)=>{
+    // db.query('select concat(nom," ",prenom) as "come" from users where id = ?',[id],(err,result)=>{console.log(result);res.json({"one":result1,"two":result})})
+    if(err) console.log(err)
+    res.send(result)
+  })
+})
+app.post("/api/addprocessus",(req,res)=>{
+ 
+  let id_proc=req.body.id_proc
+  let titre=req.body.titre
+  let desc=req.body.desc
+  let pilote=req.body.pilote
 
+  db.query("insert into processus(id_proc,titre,description,id_user) values(?,?,?,?)",[id_proc,titre,desc,pilote],(err,result)=>{
+    if(!err) return res.send(result)
+    res.send(err)
+  }
+  )})
+  app.post("/api/modifyprocessus",(req,res)=>{
+ 
+    let id_proc=req.body.id_proc
+    let titre=req.body.titre
+    let desc=req.body.desc
+    let pilote=req.body.pilote
+  
+    db.query("update processus set titre=? , Description=? , id_user=? where id_proc=?",[titre,desc,pilote,id_proc],(err,result)=>{
+      if(!err) return res.send(result)
+      res.send(err)
+    }
+    )})
+  // /api/processusdelete
+  app.post("/api/processusdelete",(req,res)=>{
+ 
+    let id_proc=req.body.id_proc
+  
+  
+    db.query("delete from processus where id_proc=?",[id_proc],(err,result)=>{
+      if(!err) return res.send(result)
+      res.send(err)
+    }
+    )})
 
+    app.get('/api/processusgetuser',(req,res)=>{
+     
+      let id=req.query.id_user
+
+      db.query('select concat(nom," ",prenom) as "come" from users where id = ?',[id],(err,result)=>{res.send(result)})
+    })
+    
 
 app.listen(3002,()=>{
     console.log("running on 3002")
