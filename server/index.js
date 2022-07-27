@@ -82,44 +82,22 @@ app.post("/api/login",(req,res)=>{
 })
 }) 
 app.post("/api/addUser",(req,res)=>{
-  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
-    if(err){
-      res.sendStatus(403);
-    }else{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
 
   let password=req.body.password;
   let username=req.body.username;
   let nom=req.body.nom;
   let prenom=req.body.prenom;
-  let processus=req.body.processus;
+  let statut=req.body.statut;
 
 
-  db.query(
-    "insert into dossier(libellé,id_doss) values(?,null)",
-    [processus],
-    
-    (err,result)=>{
-   
-    if(err){
-      
-      console.log({err:err})
-      res.send(err)
-    }
-   })
-   db.query(
-    "select id_processus from  dossier where libellé like ?",
-    [processus],
-    
-    (err,result)=>{
-   
-    if(err){
-      
-      console.log({err:err})
-      res.send(err)
-    }
+
     db.query(
-      "insert into users(email,password,nom,prenom,id_processus) values(?,?,?,?,?)",
-      [username,password,nom,prenom,result[0].id_processus],
+      "insert into users(email,password,nom,prenom,statut) values(?,?,?,?,?)",
+      [username,password,nom,prenom,statut],
       (err,result)=>{
       console.log("this")
       if(err){
@@ -138,18 +116,42 @@ app.post("/api/addUser",(req,res)=>{
    
   
 
-}})}) 
+
+// }
+
+// }) 
+app.post("/api/modifyUser",(req,res)=>{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
+
+  let id=req.body.id
+  let password=req.body.password;
+  let username=req.body.username;
+  let nom=req.body.nom;
+  let prenom=req.body.prenom;
+  let statut=req.body.statut;
+
+
+
+  db.query("update users set email=? , password=? , nom=? , prenom=? ,statut=? where id=?",[username,password,nom,prenom,statut,id],(err,result)=>{
+    if(!err) return res.send(result)
+    res.send(err)
+  }
+)})
+    
+   
+   
 
 app.post("/api/delete",(req,res)=>{
-  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
-    if(err){
-      res.sendStatus(403);
-    }else{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
     
     let id=req.body.id;
-    db.query("select id_processus from users where id=?",[id],(err,result)=>{
-     db.query("delete from dossier where id_processus = ?",[result[0].id_processus])
-    })
+   
     db.query(
     "delete from users where id=?",
     [id],
@@ -164,8 +166,10 @@ app.post("/api/delete",(req,res)=>{
   
   
 
-}) }}
-)})
+}) }
+// }
+)
+// })
 
 
 
@@ -180,15 +184,39 @@ app.get("/api/get",(req,res)=>{
       }
     // }
     )
-   
+    app.get("/api/getoption",(req,res)=>{
+      // jwt.verify(req.query.answer,'my_secret_key',function(err,data){
+      //   if(err){
+      //     res.sendStatus(403);
+      //   }else{
+          const sqlquery="select * from users where statut=1";
+          db.query(sqlquery,(err,result)=>(
+          res.send(result)))
+        }
+      // }
+      )
+    app.get("/api/getrow",(req,res)=>{
+      // jwt.verify(req.query.answer,'my_secret_key',function(err,data){
+      //   if(err){
+      //     res.sendStatus(403);
+      //   }else{
+        let id=req.query.id
+          const sqlquery="select * from users where id=?;";
+          db.query(sqlquery,[id],(err,result)=>(
+          res.send(result)))
+        }
+      // }
+      )
+     
+      
     
   
     // })
   app.post("/api/Yadmin",(req,res)=>{
-    jwt.verify(req.body.answer,'my_secret_key',function(err,data){
-      if(err){
-        res.sendStatus(403);
-      }else{
+    // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+    //   if(err){
+    //     res.sendStatus(403);
+    //   }else{
       let id=req.body.id;
         db.query(
         "update users set statut=1 where id=?",
@@ -204,12 +232,14 @@ app.get("/api/get",(req,res)=>{
       
     
     }) 
-    }})}) 
+    // }
+  })
+// })
     app.post("/api/Nadmin",(req,res)=>{
-      jwt.verify(req.body.answer,'my_secret_key',function(err,data){
-        if(err){
-          res.sendStatus(403);
-        }else{
+      // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+      //   if(err){
+      //     res.sendStatus(403);
+      //   }else{
       let id=req.body.id;
       
         db.query(
@@ -225,7 +255,10 @@ app.get("/api/get",(req,res)=>{
       
     
     }) 
-    }})}) 
+    }
+  // }
+  )
+// }) 
 
 // main
 // getting processus
@@ -559,7 +592,24 @@ app.post("/api/addprocessus",(req,res)=>{
 
       db.query('select concat(nom," ",prenom) as "come" from users where id = ?',[id],(err,result)=>{res.send(result)})
     })
+  app.post("/api/statut",(req,res)=>{
+     
+      let id=req.body.id
     
+      db.query("select statut from users where id = ?",[id],(err,result)=>{
+        if(!err) return res.send(result)
+        res.send(err)
+      }
+      )})
+      app.get("/api/statut",(req,res)=>{
+     
+        let id=req.query.id
+      
+        db.query("select statut from users where id = ?",[id],(err,result)=>{
+          if(!err) return res.send(result)
+          res.send(err)
+        }
+        )})
 
 app.listen(3002,()=>{
     console.log("running on 3002")

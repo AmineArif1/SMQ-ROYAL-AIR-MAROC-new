@@ -45,10 +45,11 @@ body{
   }
   .tableproc{
     position: relative;
-   top:25vh;
+   top:2vh;
    left:20vw;
     background-color: white;
-    padding:2vw;
+    padding:3vh 2vw 4vh 2vw;
+    
 
   }
   .tableproc th{
@@ -145,4 +146,27 @@ body{
     position: relative;
 
     left:15vw;
+  }
+  .add{
+    position: relative;
+    left:30vw;
+    margin-top: 5vh;
+    font-size: 30px;
+
+
+  }
+  .title1{
+    position: relative;
+    bottom: 5vh;
+    left:3vw;
+  }
+  .button22{
+    position: relative;
+    bottom:5.9vh;
+    left:15vw;
+  }
+  .center--button{
+    position: relative;
+    left:9vw;
+    
   }

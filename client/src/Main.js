@@ -31,7 +31,7 @@ export default function Main(props){
     let [isadmin,setIsadmin]=useState();
     let [boolfich,setBoolFich]=useState(false)
     let [entrance,setEntrance]=useState()
-
+    let [isObservant,setIsObservant]=useState(false);
     function addproc(id){
          setIsLoading(true);
     
@@ -149,8 +149,12 @@ export default function Main(props){
         setIsLoading(true);
         Axios.get("http://localhost:3002/api/getproc",{params:{answer:window.token}  }).then((response)=>{ setIsLoading(false);setRow(response.data)})
         axios.get('http://localhost:3002/api/userproc',{params:{userid:userid}}).then((response)=>{setUserproc(response.data[0].id_processus)})
-        axios.get('http://localhost:3002/api/isadmin',{params:{userid:userid}}).then((response)=>{response.data[0].statut==0 ? setIsadmin(false) : setIsadmin(true)})
-       
+        // axios.get('http://localhost:3002/api/isadmin',{params:{userid:userid}}).then((response)=>{response.data[0].statut==0 ? setIsadmin(false) : setIsadmin(true)})
+        axios.get('http://localhost:3002/api/statut',{params:{"id":userid}}).then((response)=>{
+           
+            if(response.data[0].statut==0) setIsObservant(true)
+           
+            })
         //Runs on every render
       },[]);
       useEffect(() => {
@@ -201,25 +205,25 @@ export default function Main(props){
         <>
     <Header/>
     <h4 className="source">{source} </h4>
-  {isadmin &&  <span onClick={sendusers} class="material-symbols-outlined send--users point">
+  {/* {isadmin &&  <span onClick={sendusers} class="material-symbols-outlined send--users point">
 manage_accounts
-</span>}
+</span>} */}
    
      
     <div className="main--container">
 
-   <div className="flexcenter1"><div>{(boolfich || (idd!=null && isadmin==true) )   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{(boolfich || (idd!=null && isadmin==true) ) && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
+   <div className="flexcenter1"><div>{(boolfich || (idd!=null && isObservant==false) )   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{(boolfich || (idd!=null && isObservant==false) ) && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
 file_upload
 </span>}</div>
 <h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
 </div> 
 
-    {row.map((temp)=> (<div className="aligncenter stop"> <img src={Imgdoss} width="30px"></img>   <div className="lol pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div>{(boolfich || (idd!=null && isadmin==true) )    && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point icon">
+    {row.map((temp)=> (<div className="aligncenter stop"> <img src={Imgdoss} width="30px"></img>   <div className="lol pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div>{(boolfich || (idd!=null && isObservant==false) )    && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point icon">
 delete
 </span></div></>}</div>))}
     {fichierow.map((temp)=>(( <div className="aligncenter stop topbottompad"> <img src={Imgfile} width="30px"></img>  <div className="lol pad">{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point this1">
 download
-</div>{(boolfich || (idd!=null && isadmin==true) )   && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point this2">
+</div>{(boolfich || (idd!=null && isObservant==false) )   && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point this2">
 delete
 </span></div></>}</div></div>)))}
 

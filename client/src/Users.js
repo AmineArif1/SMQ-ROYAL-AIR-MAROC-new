@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react'
 import Header from './Header'
-import Axios from 'axios';
+import axios from 'axios';
 import {  useParams,useHistory,Redirect } from "react-router-dom";
 
 export default function Users(props){
     let history=useHistory();
-    let [row,setRow]=useState([]);
+    let [row1,setrow1]=useState([]);
     let [username,setUsername]=useState('');
     let [password,setPassword]=useState('');
     let [nom,setNom]=useState('');
@@ -20,7 +20,7 @@ export default function Users(props){
     function submit(){
        
     
-        Axios.post('http://localhost:3002/api/addUser',{
+        axios.post('http://localhost:3002/api/addUser',{
                 
                 "username":username,
                 "password":password,
@@ -34,10 +34,10 @@ export default function Users(props){
                
               
                 
-                Axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
+                axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
                 setIsLoading(false);    
                 setbuttonAdd(true)
-                setRow(response.data)})
+                setrow1(response.data)})
                  
                
         }
@@ -47,36 +47,36 @@ export default function Users(props){
     }
 
     
-    const handleClickDelete = (event, param) => {
+    const handleClickDelete111 = (event, param) => {
         setIsLoading(true);
-        Axios.post("http://localhost:3002/api/delete",{"id":param,answer:window.token}).then(()=>{
-            Axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
+        axios.post("http://localhost:3002/api/delete",{"id":param,answer:window.token}).then(()=>{
+            axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
                 setIsLoading(false);
                 
-                setRow(response.data)}) 
+                setrow1(response.data)}) 
         })
        
       };
       const handleClickUpdate= (event, param,stat) => {
         setIsLoading(true);
         if(!stat)
-        Axios.post("http://localhost:3002/api/Yadmin",{"id":param,answer:window.token}).then(()=>{
-            Axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
+        axios.post("http://localhost:3002/api/Yadmin",{"id":param,answer:window.token}).then(()=>{
+            axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
                 setIsLoading(false);
-                setRow(response.data)}) 
+                setrow1(response.data)}) 
         })
         
-        else Axios.post("http://localhost:3002/api/Nadmin",{"id":param,answer:window.token}).then(()=>{
-            Axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
+        else axios.post("http://localhost:3002/api/Nadmin",{"id":param,answer:window.token}).then(()=>{
+            axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>{
                 setIsLoading(false);
-                setRow(response.data)}) 
+                setrow1(response.data)}) 
         })
        
       };
     function sendmain(){
       history.push(`/Main/${id}`);
     }
-    // const interval1 = setInterval(handleClickDelete,50);
+    // const interval1 = setInterval(handleClickDelete111,50);
     // const interval2 = setInterval(handleClickUpdate,50);
     //   useEffect(() => {
     //     return () => {
@@ -90,13 +90,13 @@ export default function Users(props){
     // elarifamine1@gmail.com
     useEffect(() => {
         
-        Axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>setRow(response.data))    
+        axios.get("http://localhost:3002/api/get",{ params: { answer: window.token } }).then((response)=>setrow1(response.data))    
         //Runs on every render
       },[]);
 
   
   
-    let idrow=row.map((res)=>{
+    let idrow1=row1.map((res)=>{
         
         return(
             
@@ -107,7 +107,7 @@ export default function Users(props){
             <th>{res.email}</th>
             <th>{res.password}</th>
             <th><button className="users--button" onClick={event => handleClickUpdate(event, res.id,res.statut)}>{res.statut ? "admin" : "pas admin"}</button></th>
-            <th><button className="users--button" onClick={event => handleClickDelete(event, res.id)}>Supprimer</button></th>
+            <th><button className="users--button" onClick={event => handleClickDelete111(event, res.id)}>Supprimer</button></th>
             </tr>
         )
     })
@@ -128,7 +128,7 @@ export default function Users(props){
             <th>ADMIN</th>
             <th>DELETE</th>
         </tr>
-       {idrow}
+       {idrow1}
 
        <tr>
         

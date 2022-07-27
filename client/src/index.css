@@ -63,31 +63,42 @@ body{
 }
 /* elarifamine1@gmail.com */
 .user--table{
-  
-  margin-top: 10vh;
+  background-color: white;
+  padding: 2vh 0vw 4vh 2vw;
+  position: absolute;
+ left:18vw;
+ top:4vh;
   display: flex;
   font-family: 'Roboto', sans-serif;
   
   justify-content: center;
 }
 .user--table th{
-  padding:2vh 3.2vw;
+  padding:2vh;
+
 }
 .user--table tr{
-  background-color: rgba(176, 149, 149,.3);
+  background-color: rgba(255, 255, 255, 1);
 }
 .user--table tr:nth-child(1){
-  background-color: rgb(222, 129, 129);
+  background-color: rgba(235, 49, 49,.9);
+}
+.user--table tr:nth-child(1){
+  background-color: rgba(235, 49, 49,.9);
+}
+.user--table th:nth-child(3){
+  width: 20vw;
+}
+.user--table th:nth-child(2){
+  width: 20vw;
+}
+.user--table th:nth-child(4){
+  width: 10vw;
+}
+.user--table th:nth-child(5){
+  width: 1vw;
 }
 
-.users--button{
-  border-width: 0;
-  background-color: rgb(43, 148, 167);
-  padding:5px 10px;
-  border-radius: 10px;
-  font-family: 'Roboto', sans-serif;
-
-}
 .add--users{
   position: absolute;
   top: 20vh;
@@ -97,8 +108,8 @@ body{
   flex-direction: column;
   background-color: rgb(255, 255, 255);
   
-  width:40vw;
   margin-left: 30vw;
+ 
   border-radius: 60px;
   
   
@@ -112,9 +123,7 @@ body{
   
 
 }
-.add--users th{
-  padding:0vw 2vw;
-}
+
 .add--users input{
   height:30px;
   width:70%;

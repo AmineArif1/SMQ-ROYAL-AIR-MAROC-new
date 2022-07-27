@@ -31,10 +31,20 @@ Axios.post('http://localhost:3002/api/login',{
     if(!response.data.message){
     
     authorized=true;
-    console.log("HAHAHAAHAHAHAHAHAHHAH")
-    console.log(response.data.result)
+    // statut here
+    Axios.post('http://localhost:3002/api/statut',{"id":response.data.result[0].id}).then((response1)=>{
+
+        if(response1.data[0].statut=='2'){
+            history.push('/Admin')
+        }
+        else{
+            history.push(`/Main/${response.data.result[0].id}`);
+        }
+    })
+
     window.token= response.data.token;
-    history.push(`/Main/${response.data.result[0].id}`);
+
+   
     }
     else{
         setResponse((re)=>
