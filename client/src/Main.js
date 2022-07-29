@@ -32,6 +32,7 @@ export default function Main(props){
     let [boolfich,setBoolFich]=useState(false)
     let [entrance,setEntrance]=useState()
     let [isObservant,setIsObservant]=useState(false);
+    let [responsi,setResponsi]=useState()
     function addproc(id){
          setIsLoading(true);
     
@@ -82,12 +83,12 @@ export default function Main(props){
         axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})  
         Axios.post("http://localhost:3002/api/getprocdos",{ "id":hist[hist.length - 1],answer:window.token})
         .then((response)=>{setIdd(hist[hist.length-1]);setSource(source.slice(0,-2));setHist(hist.slice(0, -1)); setIsLoading(false);;setRow(response.data)})
-        
+    
      
             console.log(userproc)
             console.log(entrance)
          
-            setBoolFich(false)
+            axios.post("http://localhost:3002/api/getdoss",{"id":idd}).then((response)=>{console.log(userid);if(response.data[0].id_user==idd){setBoolFich(true)}else{setBoolFich(false)}})     
         
         
      
@@ -100,10 +101,11 @@ export default function Main(props){
 
                  
     }
+
     function handleClickDelete(event,idtodelete){
         setIsLoading(true);
         if(idd==null){
-            Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete,answer:window.token}).then(()=>{
+            Axios.post("http://localhost:3002/api/procdelete1",{"id":idtodelete,answer:window.token}).then(()=>{
                 
                 Axios.get("http://localhost:3002/api/getproc",{ params:{answer:window.token} }).then((response)=>{ setIsLoading(false);setRow(response.data)})   
                  
@@ -113,7 +115,7 @@ export default function Main(props){
            
         )}
         else{
-        Axios.post("http://localhost:3002/api/procdelete",{"id":idtodelete,answer:window.token}).then(()=>{
+        Axios.post("http://localhost:3002/api/procdelete1",{"id":idtodelete,answer:window.token}).then(()=>{
             Axios.post("http://localhost:3002/api/getprocdos",{ "id":idd, answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
 
         })}}
@@ -125,7 +127,8 @@ export default function Main(props){
     Axios.post("http://localhost:3002/api/getlibelle",{ "id":currentid,answer:window.token}).then((response)=>{setSource([...source,response.data[0].libellé,' / '])})
     setHist([...hist,x]);
     Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":x,answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
-    axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})     
+    axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})
+    axios.post("http://localhost:3002/api/getdoss",{"id":currentid}).then((response)=>{console.log(response.data[0].id_user);;if(response.data[0].id_user==userid){setBoolFich(true)}})     
    }
    function handleClickDeleteFile(event,idtodelete){
     // setIsLoading(true);
@@ -154,7 +157,8 @@ export default function Main(props){
            
             if(response.data[0].statut==0) setIsObservant(true)
            
-            })
+            }
+            )
         //Runs on every render
       },[]);
       useEffect(() => {
@@ -172,7 +176,7 @@ export default function Main(props){
    const onSubmit=(e)=>{    
       
         e.preventDefault();
-        const data =new FormData();
+        const data =new FormData(); 
         data.append('file',file)
        data.append('id',idd)
         axios.post('http://localhost:3002/api/upload',data).then((e)=>{
@@ -187,9 +191,11 @@ export default function Main(props){
     const condition = ()=>{
     if(idd!=null && idd==userproc){
         setEntrance(idd)
-        setBoolFich(true)
+
         
     }}
+  
+   
     console.log(userproc+"ajahahahahahaahhaahh")
     let temp=idd!=null && idd==userproc;
     var today  = new Date();
@@ -212,18 +218,18 @@ manage_accounts
      
     <div className="main--container">
 
-   <div className="flexcenter1"><div>{(boolfich || (idd!=null && isObservant==false) )   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{(boolfich || (idd!=null && isObservant==false) ) && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
+   <div className="flexcenter1"><div>{(boolfich && isObservant==false)   &&<span class="material-symbols-outlined two" onClick={transition}>create_new_folder</span>}{(boolfich && isObservant==false ) && <span onClick={()=>setTransfile(true)} class="material-symbols-outlined two">
 file_upload
 </span>}</div>
 <h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
 </div> 
 
-    {row.map((temp)=> (<div className="aligncenter stop"> <img src={Imgdoss} width="30px"></img>   <div className="lol pad" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div>{(boolfich || (idd!=null && isObservant==false) )    && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point icon">
+    {row.map((temp)=> (<div className="aligncenter stop point" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))}> <img src={Imgdoss} width="30px"></img>   <div className=" pad"  >{temp.libellé}</div>{(boolfich  && isObservant==false )    && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point icon">
 delete
 </span></div></>}</div>))}
-    {fichierow.map((temp)=>(( <div className="aligncenter stop topbottompad"> <img src={Imgfile} width="30px"></img>  <div className="lol pad">{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div><div className="flexcenter"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point this1">
+    {fichierow.map((temp)=>(( <div className="flexi1"> <div className="flexi"><img src={Imgfile} width="30px"></img>  <div className=" ">{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div></div><div className="flexi"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point ">
 download
-</div>{(boolfich || (idd!=null && isObservant==false) )   && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point this2">
+</div>{(boolfich && isObservant==false)    && <><div  onClick={event => handleClickDeleteFile(event, temp.id_fichier)}><span class="material-symbols-outlined point ">
 delete
 </span></div></>}</div></div>)))}
 
@@ -265,7 +271,7 @@ cancel
  </div>
 </form>
 </div></>}
-<span onClick={back} className="arrow">&#10229;</span>
+{(idd!=null) &&<span onClick={back} className=" arrow point">&#10229;</span>}
 
 {transfolder && <>
 <div className="graybackground"></div>

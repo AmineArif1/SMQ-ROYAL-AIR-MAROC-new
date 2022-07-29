@@ -69,11 +69,11 @@ body{
  left:18vw;
  top:4vh;
   display: flex;
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
   
   justify-content: center;
 }
-.user--table th{
+.user--table td{
   padding:2vh;
 
 }
@@ -86,16 +86,16 @@ body{
 .user--table tr:nth-child(1){
   background-color: rgba(235, 49, 49,.9);
 }
-.user--table th:nth-child(3){
+.user--table td:nth-child(3){
   width: 20vw;
 }
-.user--table th:nth-child(2){
+.user--table td:nth-child(2){
   width: 20vw;
 }
-.user--table th:nth-child(4){
+.user--table td:nth-child(4){
   width: 10vw;
 }
-.user--table th:nth-child(5){
+.user--table td:nth-child(5){
   width: 1vw;
 }
 
@@ -461,8 +461,16 @@ font-family: 'Courier New', Courier, monospace;
 .lol{
   padding-left: 22vw;
 }
-.topbottompad{
-  padding:1vh 0vw;
+.flexi{
+  display: flex;
+  align-items: center;
+  padding: 10px 0
+}
+.flexi1{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(117, 98, 98,.6);
 }
 .icon{
   position:absolute;
@@ -470,14 +478,13 @@ font-family: 'Courier New', Courier, monospace;
   left:80vw;
 }
 .this1{
-  position:absolute;
-  top:55vh;
-  left:80vw;
+  position:relative;
+  
+  left:21.5vw;
 }
 .this2{
-  position:absolute;
-  top:55vh;
-  left:78.5vw;
+  position: relative;
+    left: 22vw;
 }
 .title{
   position: relative;

@@ -15,7 +15,8 @@ const path = require("path")
 const { query } = require('express');
 const util=require('util');
 var os = require('os');
-var fs=require('fs')
+var fs=require('fs');
+const { abort, send } = require('process');
 
 // middlewares
 // app.use(bodyParser);
@@ -296,10 +297,10 @@ app.post("/api/getprocdos",(req,res)=>{
 })})
 // ajouté libellé
 app.post("/api/addproc",(req,res)=>{
-  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
-    if(err){
-      res.sendStatus(403);
-    }else{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
   let proc=req.body.processus;
   let id=req.body.id;
   
@@ -318,15 +319,65 @@ app.post("/api/addproc",(req,res)=>{
     // http://localhost:3002/api/addUser
 
 })
-}})})
-app.post("/api/procdelete",(req,res)=>{
-  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+}
+)
+app.post("/api/addprocname",(req,res)=>{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
+  let id=req.body.id;
+  
+  db.query(
+    'insert into dossier(libellé,id_doss) values("Dossier de base",?)',
+    [id],
+    
+    (err,result)=>{
+   
     if(err){
-      res.sendStatus(403);
-    }else{
+      
+      console.log({err:err})
+      res.send(err)
+    }
+    res.send(result)
+    // http://localhost:3002/api/addUser
+
+})
+}
+)
+app.post("/api/addprocroot",(req,res)=>{
+  
+  let proc=req.body.processus;
+
+  
+  db.query(
+    "insert into dossier(libellé,id_doss) values(?,null)",
+    [proc],
+    
+    (err,result)=>{
+   
+    if(err){
+      
+      console.log({err:err})
+      res.send(err)
+    }
+  db.query("select id_processus from dossier where libellé like ?",[proc],(err,result1)=>{
+    if(err) console.log(err)
+    res.send(result1)
+    console.log(result1)
+  })  // http://localhost:3002/api/addUser
+
+})
+})
+app.post("/api/procdelete1",(req,res)=>{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
     let id=req.body.id;
+    console.log(id)
     db.query(
-    "delete from dossier where id_processus=?",
+    "delete from dossier where id_processus = ?",
     [id],
     (err,result)=>{
    
@@ -340,7 +391,31 @@ app.post("/api/procdelete",(req,res)=>{
   
 
 }) }
-})})
+)
+
+app.post("/api/procdelete",(req,res)=>{
+  // jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+  //   if(err){
+  //     res.sendStatus(403);
+  //   }else{
+    let id=req.body.id;
+    console.log(id)
+    db.query(
+    "delete from dossier where libellé like ?",
+    [id],
+    (err,result)=>{
+   
+    if(err){
+      
+      console.log({err:err})
+    }
+    res.send(result)
+  
+  
+  
+
+}) }
+)
 
 app.post("/api/fichiers",(req,res)=>{
   
@@ -534,9 +609,10 @@ app.get('/api/isadmin',(req,res)=>{
 })
 app.get('/api/processusget',(req,res)=>{
   let id=req.query.id_user
-  db.query('select * from processus p,users u where u.id=p.id_user ',(err,result)=>{
+  db.query('select * from processus p,users u where u.id=p.id_user',(err,result)=>{
     // db.query('select concat(nom," ",prenom) as "come" from users where id = ?',[id],(err,result)=>{console.log(result);res.json({"one":result1,"two":result})})
     if(err) console.log(err)
+    console.log(result)
     res.send(result)
   })
 })
@@ -556,9 +632,11 @@ app.post("/api/addprocessus",(req,res)=>{
   let titre=req.body.titre
   let desc=req.body.desc
   let pilote=req.body.pilote
+  console.log(pilote)
+
 
   db.query("insert into processus(id_proc,titre,description,id_user) values(?,?,?,?)",[id_proc,titre,desc,pilote],(err,result)=>{
-    if(!err) return res.send(result)
+    if(!err) { console.log(result); return res.send(result);}
     res.send(err)
   }
   )})
@@ -610,7 +688,23 @@ app.post("/api/addprocessus",(req,res)=>{
           res.send(err)
         }
         )})
+app.post("/api/getdoss",(req,res)=>{
 
+  let id=req.body.id
+ 
+  db.query('select libellé from dossier where id_processus = ?',[id],(err,result1)=>{
+    console.log(result1[0].libellé.split(" ")[0])
+  db.query("select id_user from processus where id_proc = ?",[result1[0].libellé.split(" ")[0]],(err,result)=>{
+    if(!err) { console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+    res.send(result);
+    console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHH") }
+    else res.send(err)
+  })
+    // db.query('select  from processus where ')
+    
+  })
+  // 
+})
 app.listen(3002,()=>{
     console.log("running on 3002")
 }

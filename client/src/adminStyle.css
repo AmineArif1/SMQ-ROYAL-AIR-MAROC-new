@@ -52,22 +52,34 @@ body{
     
 
   }
-  .tableproc th{
+  .tableproc td{
     padding:2vh;
+    max-height: 15vh;
     
 
   }
+  
   .tableproc tr:nth-child(1){
     background-color: rgba(235, 49, 49,.9);
   }
-  .tableproc th:nth-child(3){
-    width: 20vw;
+  .tableproc td:nth-child(3){
+    min-width: 20vw;
+    max-width: 22vw;
+    max-height: 40vh;
+    overflow: auto;
+
   }
-  .tableproc th:nth-child(2){
-    width: 20vw;
+  .tableproc td:nth-child(2){
+    min-width: 20vw;
+    max-width: 20vw;
+    overflow: auto;
   }
-  .tableproc th:nth-child(4){
-    width: 10vw;
+  .tableproc td:nth-child(4){
+    min-width: 15vw;
+ 
+
+   max-width: 15vw;
+   overflow: auto;
   }
   .plus{
     position: relative;
@@ -169,4 +181,13 @@ body{
     position: relative;
     left:9vw;
     
+  }
+  .overflow{
+    overflow: scroll;
+  }
+  .roww{
+    height: 200px;
+  }
+  .smol{
+    max-height: 15vh;
   }

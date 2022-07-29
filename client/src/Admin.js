@@ -23,8 +23,8 @@ export default function Admin(props){
 
     useEffect(()=>{axios.get('http://localhost:3002/api/processusget').then((response)=>{setRow(response.data)});
     axios.get("http://localhost:3002/api/getoption",{ params: {answer: window.token } }).then((response)=>{
-       
-        
+
+        setPilote(response.data[0].id)
         setOption(response.data)})
 }
     ,[])
@@ -35,15 +35,15 @@ export default function Admin(props){
     
         return(
             
-            <tr >
+            <tr  >
             
-            <th>{res.id_proc}</th>
-            <th>{res.titre}</th>
-            <th>{res.Description}</th>
+           <td> <div className="smol"> {res.id_proc}</div></td>
+           <td> <div className="smol"> {res.titre}</div></td>
+             <td styleName="overflow"><div className="smol">{res.Description}</div></td>
            
-           <th>{res.nom+" "+res.prenom}</th>
+          <td><div className="smol">{res.nom+" "+res.prenom}</div></td>
 
-            <th><span class="material-symbols-outlined point point" onClick={()=>{handleClickDelete(res.id_proc)}}>delete</span> <span onClick={()=>{
+            <td><span class="material-symbols-outlined point point" onClick={()=>{handleClickDelete(res.id_proc,res.titre)}}>delete</span> <span onClick={()=>{
                 setThreepoint(true);setBarvar1(false)
                 axios.get('http://localhost:3002/api/processusgettemp',{params:{"id_proc":res.id_proc}}).then((response)=>{
                     setProc(response.data[0].id_proc)
@@ -53,7 +53,7 @@ export default function Admin(props){
             })
                 }} class="material-symbols-outlined point">
 more_vert
-</span></th>
+</span></td>
            
             </tr>
         )
@@ -65,12 +65,23 @@ more_vert
 
 
     function submitproc(){
+
+
         axios.post("http://localhost:3002/api/addprocessus",{
             "id_proc":proc,
             "titre":titre,
             "desc":desc,
             "pilote":pilote
-        }).then((response)=>{console.log(response);axios.get('http://localhost:3002/api/processusget').then((response)=>{setRow(response.data);})})
+            // /api/addprocname
+        }).then((response)=>{axios.post('http://localhost:3002/api/addprocroot',{"processus":proc+" - "+titre}).then((response)=>{
+            axios.post('http://localhost:3002/api/addprocname',{"id":response.data[0].id_processus})  ;
+        })  ;
+
+
+        
+
+
+        axios.get('http://localhost:3002/api/processusget').then((response)=>{setRow(response.data);});})
     }
     
     function submitproc2(){
@@ -81,9 +92,10 @@ more_vert
             "pilote":pilote
         }).then((response)=>{console.log(response);axios.get('http://localhost:3002/api/processusget').then((response)=>{setRow(response.data);})})
     }
-    const handleClickDelete = (param) => {
+    const handleClickDelete = (param,added) => {
 
         axios.post("http://localhost:3002/api/processusdelete",{"id_proc":param}).then(()=>{
+            axios.post("http://localhost:3002/api/procdelete",{"id": param+' - '+added})
             axios.get("http://localhost:3002/api/processusget",).then((response)=>{
               
                 
@@ -230,16 +242,16 @@ more_vert
             
             <tr >
             
-            <th>{res.nom}</th>
-            <th>{res.prenom}</th>
-            <th>{res.email}</th>
-            <th onClick={()=>setVisib(!visib)}>{!visib ? <span class="material-symbols-outlined point">
+            <td>{res.nom}</td>
+            <td>{res.prenom}</td>
+            <td>{res.email}</td>
+            <td onClick={()=>setVisib(!visib)}>{!visib ? <span class="material-symbols-outlined point">
 visibility
-</span> : res.password}</th>
-           {res.statut=="0" && <th>Consultant</th>}
-           {res.statut=="1" && <th>Pilote</th>}
-           {res.statut=="2" && <th>Admin</th>}
-            <th><span className="material-symbols-outlined point" onClick={event => handleClickDelete111(event, res.id)}>delete</span><span className="material-symbols-outlined point" onClick={event => {
+</span> : res.password}</td>
+           {res.statut=="0" && <td>Consultant</td>}
+           {res.statut=="1" && <td>Pilote</td>}
+           {res.statut=="2" && <td>Admin</td>}
+            <td><span className="material-symbols-outlined point" onClick={event => handleClickDelete111(event, res.id)}>delete</span><span className="material-symbols-outlined point" onClick={event => {
                 setThreepoint2(true);setBarvar2(false);
                 axios.get("http://localhost:3002/api/getrow",{ params:{"id":res.id} }).then((response)=>{
                     setDataid(response.data[0].id)
@@ -250,13 +262,14 @@ visibility
                     setStatu(response.data[0].statut)
                 })
 
-            }}>more_vert</span></th>
+            }}>more_vert</span></td>
             
             </tr>
         )
     })
     
     return (
+
         <>
      <div className="sidebar">
         <img src={logo} width="220px"></img>
@@ -272,10 +285,10 @@ visibility
       {barvar1  &&<table className="tableproc" border="0px">
             <thead>
             <tr>
-                <th>Processus</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Pilote</th>
+                <td>Processus</td>
+                <td>Titre</td>
+                <td >Description</td>
+                <td>Pilote</td>
                 
             </tr>
             </thead>
@@ -335,11 +348,11 @@ cancel
     <tbody>
         <tr>
             
-            <th>NOM</th>
-            <th>PRENOM</th>
-            <th>EMAIL</th>
-            <th>PASSWORD</th>
-            <th>PROFILE</th>
+            <td>NOM</td>
+            <td>PRENOM</td>
+            <td>EMAIL</td>
+            <td>PASSWORD</td>
+            <td>PROFILE</td>
             
         </tr>
        {idrow1}
@@ -419,7 +432,12 @@ cancel
     <div className="flex" > <div className="temp-left">Password : </div>  <input value={password} className="temp-right" type="text" onChange={(e)=>{setPassword(e.target.value)}}></input></div>
     <div className="flex" > <div className="temp-left">Nom :</div><input value={nom} className="temp-right" type="text" onChange={(e)=>{setNom(e.target.value)}}></input></div>
     <div className="flex" > <span className="temp-left">Prenom :</span> <input value={prenom} className="temp-right" type="text" onChange={(e)=>{setPrenom(e.target.value)}}></input></div>
-    {/* <span className="ktab">Processus :</span> <input className="add--input" type="text" onChange={(e)=>{setProcessus(e.target.value)}}></input> */}
+    
+    {/* <span className="ktab">Processus"
+    :</span> <input className="add--input" 
+    type="text" onChange={(e)=>{setProcessus
+    sssssssss(e.target.value)}}></input> */}
+
     <div className="flex">  <span className="temp-left">Profile:</span> 
     <select value={statut} className="temp-right"  onChange={(e)=>{setStatu(e.target.value);console.log(e.target.value)}}>
 
