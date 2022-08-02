@@ -44,11 +44,11 @@ body{
     transform: scale(1.1);
   }
   .tableproc{
-    position: relative;
-   top:2vh;
-   left:20vw;
+    position: absolute;
+   top:4vh;
+   left:18vw;
     background-color: white;
-    padding:3vh 2vw 4vh 2vw;
+    padding:2vh 0vw 4vh 2vw;
     
 
   }
@@ -83,7 +83,8 @@ body{
   }
   .plus{
     position: relative;
-    left:28vw;
+    left:31vw;
+    top:1vh;
     font-size: 30px;
   }
   .flex{
@@ -161,8 +162,8 @@ body{
   }
   .add{
     position: relative;
-    left:30vw;
-    margin-top: 5vh;
+    left:31vw;
+    top:1vh;
     font-size: 30px;
 
 
@@ -191,3 +192,24 @@ body{
   .smol{
     max-height: 15vh;
   }
+  .logout2{
+    position: absolute;
+    color:rgb(144, 43, 43);
+    top:90vh;
+    left:5vw;
+    font-size: 50px;
+
+  }
+.well{
+  display: flex;
+  justify-content: space-between;
+}
+.aha{
+  width: 53vw;
+}
+.pos{
+  padding:1vw;
+  width: 10vw;
+  margin-right: 12vw;
+  border-width: .5;
+}

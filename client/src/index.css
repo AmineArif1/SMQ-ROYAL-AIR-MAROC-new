@@ -69,11 +69,13 @@ body{
  left:18vw;
  top:4vh;
   display: flex;
+  min-width: 55vw;
   /* font-family: 'Roboto', sans-serif; */
   
   justify-content: center;
 }
 .user--table td{
+
   padding:2vh;
 
 }
@@ -90,10 +92,10 @@ body{
   width: 20vw;
 }
 .user--table td:nth-child(2){
-  width: 20vw;
+  width: 5vw;
 }
 .user--table td:nth-child(4){
-  width: 10vw;
+  width: 24vw;
 }
 .user--table td:nth-child(5){
   width: 1vw;

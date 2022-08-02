@@ -25,6 +25,7 @@ export default function Main(props){
     let [fichierow,setFichierow]=useState([])
     let [fileid,setFileid]=useState([])
     let [transfolder,setTransfolder]=useState(false)
+    let [transfolder1,setTransfolder1]=useState(false)
     let [transfile,setTransfile]=useState(false)
     let {userid}=useParams();
     let [userproc,setUserproc]=useState()
@@ -33,6 +34,7 @@ export default function Main(props){
     let [entrance,setEntrance]=useState()
     let [isObservant,setIsObservant]=useState(false);
     let [responsi,setResponsi]=useState()
+
     function addproc(id){
          setIsLoading(true);
     
@@ -80,7 +82,7 @@ export default function Main(props){
     }
     function back(){
         setIsLoading(true);
-        axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})  
+        axios.post("http://localhost:3002/api/getfile",{id:idd,answer:window.token}).then((response)=>{setFichierow(response.data)})  
         Axios.post("http://localhost:3002/api/getprocdos",{ "id":hist[hist.length - 1],answer:window.token})
         .then((response)=>{setIdd(hist[hist.length-1]);setSource(source.slice(0,-2));setHist(hist.slice(0, -1)); setIsLoading(false);;setRow(response.data)})
     
@@ -88,7 +90,7 @@ export default function Main(props){
             console.log(userproc)
             console.log(entrance)
          
-            axios.post("http://localhost:3002/api/getdoss",{"id":idd}).then((response)=>{console.log(userid);if(response.data[0].id_user==idd){setBoolFich(true)}else{setBoolFich(false)}})     
+            axios.get("http://localhost:3002/api/getdoss",{params:{"id":idd,answer:window.token}}).then((response)=>{if(response.data[0].id_user==idd){setBoolFich(true)}else{setBoolFich(false)}})     
         
         
      
@@ -127,14 +129,15 @@ export default function Main(props){
     Axios.post("http://localhost:3002/api/getlibelle",{ "id":currentid,answer:window.token}).then((response)=>{setSource([...source,response.data[0].libellé,' / '])})
     setHist([...hist,x]);
     Axios.post("http://localhost:3002/api/getprocdos",{ "id":currentid,"parentid":x,answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
-    axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})
-    axios.post("http://localhost:3002/api/getdoss",{"id":currentid}).then((response)=>{console.log(response.data[0].id_user);;if(response.data[0].id_user==userid){setBoolFich(true)}})     
+    axios.post("http://localhost:3002/api/getfile",{id:idd,answer:window.token}).then((response)=>{setFichierow(response.data)})
+    axios.get("http://localhost:3002/api/getdoss",{params:{"id":currentid,answer:window.token}}).then((response)=>{console.log(response);;if(response.data[0].id_user==userid){setBoolFich(true)}})     
    }
    function handleClickDeleteFile(event,idtodelete){
     // setIsLoading(true);
+    setIsLoading(true)
    
     Axios.post("http://localhost:3002/api/filedelete",{"id":idtodelete,answer:window.token}).then(()=>{
-        axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)}) 
+        axios.post("http://localhost:3002/api/getfile",{id:idd,answer:window.token}).then((response)=>{ setIsLoading(false);setFichierow(response.data)}) 
 
     })}
 
@@ -142,6 +145,14 @@ export default function Main(props){
 
    function sendusers(){
     history.push(`/Users/${userid}`);
+   }
+   function handleEdit(idproc,xd){
+      
+
+        axios.get('http://localhost:3002/api/editdoss',{params:{'lib':xd,"id":idproc,answer:window.token}}).then(
+            Axios.post("http://localhost:3002/api/getprocdos",{ "id":idd, answer:window.token}).then((response)=>{ setIsLoading(false);setRow(response.data)})
+
+    )
    }
 
    useEffect(()=>{console.log(hist)},[hist])
@@ -151,9 +162,9 @@ export default function Main(props){
     useEffect(() => {
         setIsLoading(true);
         Axios.get("http://localhost:3002/api/getproc",{params:{answer:window.token}  }).then((response)=>{ setIsLoading(false);setRow(response.data)})
-        axios.get('http://localhost:3002/api/userproc',{params:{userid:userid}}).then((response)=>{setUserproc(response.data[0].id_processus)})
+        axios.get('http://localhost:3002/api/userproc',{params:{userid:userid,answer:window.token}}).then((response)=>{setUserproc(response.data[0].id_processus)})
         // axios.get('http://localhost:3002/api/isadmin',{params:{userid:userid}}).then((response)=>{response.data[0].statut==0 ? setIsadmin(false) : setIsadmin(true)})
-        axios.get('http://localhost:3002/api/statut',{params:{"id":userid}}).then((response)=>{
+        axios.get('http://localhost:3002/api/statut',{params:{"id":userid,answer:window.token}}).then((response)=>{
            
             if(response.data[0].statut==0) setIsObservant(true)
            
@@ -162,7 +173,7 @@ export default function Main(props){
         //Runs on every render
       },[]);
       useEffect(() => {
-        axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setFichierow(response.data)})  
+        axios.post("http://localhost:3002/api/getfile",{id:idd,answer:window.token}).then((response)=>{setFichierow(response.data)})  
       },[idd])
       useEffect(()=>{console.log(userproc)},[userproc])
       
@@ -174,14 +185,16 @@ export default function Main(props){
         setFile(e.target.files[0])
     }
    const onSubmit=(e)=>{    
-      
+    setIsLoading(true)
         e.preventDefault();
         const data =new FormData(); 
         data.append('file',file)
        data.append('id',idd)
+       data.append('answer',window.token)
         axios.post('http://localhost:3002/api/upload',data).then((e)=>{
             toast.success('Envoie terminé');
-            axios.post("http://localhost:3002/api/getfile",{id:idd}).then((response)=>{setTransfile(false);setFichierow(response.data)})
+            setIsLoading(false)
+            axios.post("http://localhost:3002/api/getfile",{id:idd,answer:window.token}).then((response)=>{setTransfile(false);setFichierow(response.data)})
         })
         .catch((e)=>{
               toast.error('Echec');
@@ -202,7 +215,7 @@ export default function Main(props){
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     function download(name){
         window.open(`http://localhost:3002/api/download?filename=${name}`, '_blank');
-        axios.get('http://localhost:3002/api/download',{params:{filename:name}}).then(()=>{})
+        axios.get('http://localhost:3002/api/download',{params:{filename:name,answer:window.token}}).then(()=>{})
     }
     function transition(){
         setTransfolder(true)
@@ -224,7 +237,7 @@ file_upload
 <h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
 </div> 
 
-    {row.map((temp)=> (<div className="aligncenter stop point" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))}> <img src={Imgdoss} width="30px"></img>   <div className=" pad"  >{temp.libellé}</div>{(boolfich  && isObservant==false )    && <><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point icon">
+    {row.map((temp)=> (<div className="aligncenter stop well " > <div className="flexi" ><img src={Imgdoss} width="30px"></img>   <div className=" pad aha point" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div></div>{(boolfich  && isObservant==false )    && <><span class="material-symbols-outlined" onClick={()=>{console.log("xd");setResponsi(temp.id_processus);setTransfolder1(true)}}>edit</span><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point ">
 delete
 </span></div></>}</div>))}
     {fichierow.map((temp)=>(( <div className="flexi1"> <div className="flexi"><img src={Imgfile} width="30px"></img>  <div className=" ">{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div></div><div className="flexi"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point ">
@@ -283,5 +296,19 @@ cancel
  <input className="auth--input" type="text" onChange={(e)=>{setInputproc(e.target.value)}}></input>
  <button type="button" onClick={()=>addproc(idd)} className="auth--submit point">Confirmer</button>
  </div></>}
+
+
+ {transfolder1 && <>
+<div className="graybackground"></div>
+<span onClick={()=>setTransfolder1(false)} class="material-symbols-outlined quit1">
+cancel
+</span>
+ <div className="center--form">
+ <h3 className="lib">libellé</h3>
+ <input className="auth--input" type="text" onChange={(e)=>{setInputproc(e.target.value)}}></input>
+ <button type="button" onClick={()=>{handleEdit(responsi,inputproc);setTransfolder1(false)}} className="auth--submit point">Confirmer</button>
+ </div></>}
     </>)
  }
+
+ 

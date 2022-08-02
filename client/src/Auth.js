@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import {useState,useEffect} from 'react';
+import {useState,useEffect,React} from 'react';
 import { useHistory } from "react-router-dom";
 import Axios from 'axios';
 
 let authorized=false;
 function Auth(){
-    
+
     let history=useHistory();
     let [username,setUsername]=useState('');
     let [password,setPassword]=useState('');
@@ -32,7 +32,7 @@ Axios.post('http://localhost:3002/api/login',{
     
     authorized=true;
     // statut here
-    Axios.post('http://localhost:3002/api/statut',{"id":response.data.result[0].id}).then((response1)=>{
+    Axios.post('http://localhost:3002/api/statut',{"id":response.data.result[0].id,"answer":response.data.token}).then((response1)=>{
 
         if(response1.data[0].statut=='2'){
             history.push('/Admin')
@@ -52,13 +52,16 @@ Axios.post('http://localhost:3002/api/login',{
     }
 })
     }
+   
     return(
+
         <div className="container">,
         <img className="logo" src='https://upload.wikimedia.org/wikipedia/commons/b/bf/Logo_Royal_Air_Maroc.svg'></img>
         <input className="auth--input" type="text" onChange={(e)=>{setUsername(e.target.value)}}></input>
         <input className="auth--input" type="text" onChange={(e)=>{setPassword(e.target.value)}}></input>
         <button className="auth--submit" onClick={submit} >Confirmer</button>,
         <h1>{response}</h1>,
+     
     </div>
        
       
