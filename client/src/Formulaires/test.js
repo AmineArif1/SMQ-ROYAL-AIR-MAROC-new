@@ -1,74 +1,61 @@
 import axios from 'axios'
-import { useState,React } from 'react'
+import { useState,React, useEffect } from 'react'
 
 
 
 function Test(){
-    const [inputFields, setInputFields] = useState([
-        {name: '', age: ''}
-    ])
-    const [label, setLabel] = useState([
-        
-    ])
-    const handleFormChange = (index, event) => {
-        let data = [...inputFields];
-        data[index][event.target.name] = event.target.value;
-        setInputFields(data);
+  var [page , setPage] = useState([]);
+  var [data, setData]=useState({});
+  function todone(temp,e){
+    
+    axios.post("http://localhost:3002/api/updateelement",{"id":temp,"data":data[e]}).then(
+      axios.get("http://localhost:3002/api/getpage").then((response)=>{
+        setPage(response.data)
+      })
+    );
+
+  }
+  function todelete(temp){
+    axios.post("http://localhost:3002/api/deleteelement",{"id":temp}).then(
+      axios.get("http://localhost:3002/api/getpage").then((response)=>{
+        setPage(response.data)
+      })
+    );
+  }
+
+  useEffect(()=>{
+    // copy paste this to apply changes without manual reload :)
+    axios.get("http://localhost:3002/api/getpage").then((response)=>{
+      setPage(response.data)
+    })
+  },[])
+  var inpage = page.map((temp,index)=>{
+    if(temp.type==="input"){
+      data[index]=temp.contenue
+      return (<div className='flextext'><input onChange={(e)=>data[index]=e.target.value}  className='label' type="text" defaultValue={temp.contenue}></input>
+    <span onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined">close</span></div>)
+
     }
-    const addFields = () => {
-        let newfield = { name: '', age: '' }
-
-        setInputFields([...inputFields, newfield])
+    
+    if(temp.type==="textarea"){
+      data[index]=temp.contenue
+      return (<div className='flextext'><textarea onChange={(e)=>data[index]=e.target.value}  className='textarea' defaultValue={temp.contenue}></textarea>
+          <span  onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined">close</span></div>)
     }
-    const submit = (e) => {
-        e.preventDefault();
-        inputFields.forEach((item,index)=>{
-            axios.post("http://localhost:3002/shito",{"item":item})
-
-        })
-    }
-    const handleLabelChange = (index,event) =>{
-        let data = [...inputFields,event.target.value];
+    
+    
 
 
-        setLabel(data)
-    }
-  
-      return (
-  
-        <div className="App">
-      <form>
-        {inputFields.map((input, index) => {
-             
-          return (
-          <>
-           {console.log(label)}
-            <div key={index}>
-            <input type="text" value={label[index]} onChange={event => handleLabelChange(index,event)}></input>
-            <textarea
-              name='name'
-              placeholder='Name'
-              value={input.name}
-              onChange={event => handleFormChange(index, event)}
-            />
-            <textarea
-              name='age'
-              placeholder='Age'
-              value={input.age}
-              onChange={event => handleFormChange(index, event)}
-            ></textarea>
-          </div>
-            </>
-          )
-        })}
-        <button type='button' onClick={addFields}>Add More..</button>
-        <button type='button' onClick={submit}>Submit</button>
-      </form>
-    </div>
 
-      );
-    }
-
+  })
+ 
+  return (
+    <>
+    {inpage}
+    </>
+    )
+      
+      }
     
 
 export default Test

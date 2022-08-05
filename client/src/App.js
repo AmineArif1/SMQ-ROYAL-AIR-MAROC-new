@@ -6,8 +6,10 @@ import Fichier from './Fichier'
 import Admin from './Admin'
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom"
 import 'react-toastify/dist/ReactToastify.css';
+
 import {ToastContainer} from 'react-toastify';
 import Test from './Formulaires/test'
+import './Formulaires/form.css'
 
 function App() {
   console.log(<Main/>)

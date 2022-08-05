@@ -824,6 +824,45 @@ app.get('/api/editdoss',(req,res)=>{
     }else{
      db.query('update dossier set libellé = ? where id_processus = ?',[req.query.lib,req.query.id])
 }})})
+app.get('/api/getpage',(req,res)=>{
+
+    db.query('select * from  ciprocessus',(err,result)=>{
+      console.log(result)
+      res.send(result)
+    })
+   
+  }
+    
+  )
+ 
+
+// maj les componements
+
+app.post('/api/updateelement',(req,res)=>{
+    let id=req.body.id
+    let data=req.body.data
+    db.query('update ciprocessus set contenue = ? where idelement = ?',[data,id],(err,result)=>{
+  if(err) res.send(err)
+  else res.send(result)
+    })
+   
+  }
+    
+  )
+
+  app.post('/api/deleteelement',(req,res)=>{
+    let id=req.body.id
+
+    db.query('delete from ciprocessus where idelement = ?',[id],(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+   
+  }
+    
+  )
+ 
+
 
 app.listen(3002,()=>{
     console.log("running on 3002")

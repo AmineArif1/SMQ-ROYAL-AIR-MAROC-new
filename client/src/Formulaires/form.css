@@ -1,0 +1,12 @@
+.label{
+    margin: 10px;
+}
+.textarea{
+    width:80%;
+    margin:10px;
+}
+
+.flextext{
+    display: flex;
+    align-items: center;
+}

@@ -1,5 +1,4 @@
 import { useParams,Redirect,useNavigate } from "react-router-dom"
-
 import {useEffect, useState,createContext} from 'react'
 import Header from './Header'
 import Axios from 'axios';
@@ -12,7 +11,6 @@ import {toast} from "react-toastify";
 export default function Main(props){
    
     let history=useHistory();
-
     let [row,setRow]=useState([]);
     let [inputproc,setInputproc]=useState('')
     let [tempo,setTempo]=useState(true)
@@ -237,7 +235,7 @@ file_upload
 <h3 className="time"> {today.toLocaleDateString("fr-FR", options)}</h3>
 </div> 
 
-    {row.map((temp)=> (<div className="aligncenter stop well " > <div className="flexi" ><img src={Imgdoss} width="30px"></img>   <div className=" pad aha point" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div></div>{(boolfich  && isObservant==false )    && <><span class="material-symbols-outlined" onClick={()=>{console.log("xd");setResponsi(temp.id_processus);setTransfolder1(true)}}>edit</span><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point ">
+    {row.map((temp)=> (<div className="aligncenter stop well " > <div className="flexi" ><img src={Imgdoss} width="30px"></img>   <div className=" pad aha point" onClick={()=>(tofichier(temp.id_processus,temp.id_doss))} >{temp.libellé}</div></div>{(boolfich  && isObservant==false )    && <><span class="material-symbols-outlined point" onClick={()=>{console.log("xd");setResponsi(temp.id_processus);setTransfolder1(true)}}>edit</span><div  onClick={event => handleClickDelete(event, temp.id_processus)}><span class="material-symbols-outlined point ">
 delete
 </span></div></>}</div>))}
     {fichierow.map((temp)=>(( <div className="flexi1"> <div className="flexi"><img src={Imgfile} width="30px"></img>  <div className=" ">{temp.libellé.substring(temp.libellé.indexOf("-")+1)}</div></div><div className="flexi"><div onClick={()=>(download(temp.libellé))} class="material-symbols-outlined point ">
