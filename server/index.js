@@ -827,7 +827,6 @@ app.get('/api/editdoss',(req,res)=>{
 app.get('/api/getpage',(req,res)=>{
 
     db.query('select * from  ciprocessus',(err,result)=>{
-      console.log(result)
       res.send(result)
     })
    
@@ -839,7 +838,9 @@ app.get('/api/getpage',(req,res)=>{
 // maj les componements
 
 app.post('/api/updateelement',(req,res)=>{
+
     let id=req.body.id
+    console.log(id)
     let data=req.body.data
     db.query('update ciprocessus set contenue = ? where idelement = ?',[data,id],(err,result)=>{
   if(err) res.send(err)
@@ -850,7 +851,7 @@ app.post('/api/updateelement',(req,res)=>{
     
   )
 
-  app.post('/api/deleteelement',(req,res)=>{
+app.post('/api/deleteelement',(req,res)=>{
     let id=req.body.id
 
     db.query('delete from ciprocessus where idelement = ?',[id],(err,result)=>{
@@ -860,8 +861,26 @@ app.post('/api/updateelement',(req,res)=>{
    
   }
     
-  )
- 
+)
+app.post('/api/addtextarea',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("textarea",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+app.post('/api/addinput',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("input",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+app.post('/api/addsemiinput',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("halfinput",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+
 
 
 app.listen(3002,()=>{
