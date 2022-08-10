@@ -7,21 +7,34 @@ function Test(){
   var [page , setPage] = useState([]);
   var [data, setData]=useState({});
   var [half, setHalf] = useState([]);
-  
+  let [performance,setPerformace]= useState([]);
+  let [tablo,setTablo]= useState([]);
+  let [ deletor , setDeletor] = useState([])
+  let counter = 0;
+
+  useEffect(()=>{
+    axios.get("http://localhost:3002/api/getpage").then((response)=>{
+
+      setPage(response.data)
+    })
+  },[deletor])
   function todone(temp,e){
     
     axios.post("http://localhost:3002/api/updateelement",{"id":temp,"data":data[e]}).then(
       axios.get("http://localhost:3002/api/getpage").then((response)=>{
+
         setPage(response.data)
       })
     );
 
   }
   function todelete(temp){
-    axios.post("http://localhost:3002/api/deleteelement",{"id":temp}).then(
+    axios.get("http://localhost:3002/api/deleteelement",{params:{"id":temp}}).then(
       axios.get("http://localhost:3002/api/getpage").then((response)=>{
+
         setPage(response.data)
       })
+    
     );
   }
   function textarea(){
@@ -45,19 +58,88 @@ function Test(){
       })
     )
   }
+  function semilibellé(){
+    axios.post("http://localhost:3002/api/addsemilibelle").then(
+      axios.get("http://localhost:3002/api/getpage").then((response)=>{
+        setPage(response.data)
+      })
+    )
+  }
+  function thirdzonetext(){
+    axios.post("http://localhost:3002/api/addthirdinput").then(
+      axios.get("http://localhost:3002/api/getpage").then((response)=>{
+        setPage(response.data)
+      })
+    )
+  }
+  function thirdzonelibellé(){
+    axios.post("http://localhost:3002/api/thirdzonelib").then(
+      axios.get("http://localhost:3002/api/getpage").then((response)=>{
+        setPage(response.data)
+      })
+    )
+  }
   function table(){
-    let rowum = prompt("row number")
-    let colum = prompt("collumn number")
+    axios.post("http://localhost:3002/api/addtable").then(
+      axios.get("http://localhost:3002/api/getpage").then((response)=>{
+        setPage(response.data)
+      })
+    )
+    
 
   }
+
   useEffect(()=>{
     // copy paste this to apply changes without manual reload :)
     axios.get("http://localhost:3002/api/getpage").then((response)=>{
-      setPage(response.data)
+      setPage(response.data);
+      axios.get("http://localhost:3002/api/getperformance").then((response)=>{setTablo(response.data);setPerformace(response.data)})
+
       
     })
   },[])
+  function rowok(index){
+    axios.post("http://localhost:3002/api/updaterow",{'data':tablo[index]}).then()
+  }
+  var per=performance.map((lol,index)=>{
+  function rowdelete(index){
+    axios.post("http://localhost:3002/api/deleterow",{'data':tablo[index].idIndi_Performance}).then( 
+     
+  
+    )
+  }  
+    return( 
+  <tr>
+    <td>
+     <textarea onChange={(e)=>tablo[index].Nom_indicateur=e.target.value} defaultValue= {lol.Nom_indicateur}></textarea>
+    </td>
+    <td>
+    <textarea onChange={(e)=>tablo[index].Definition=e.target.value} defaultValue=   {lol.Definition}></textarea>
+  </td>
+  <td>
+  <textarea onChange={(e)=>tablo[index].Formule=e.target.value} defaultValue=   {lol.Formule}></textarea>
+
+</td>
+<td>
+<textarea onChange={(e)=>tablo[index].Responsable_maj=e.target.value} defaultValue=    {lol.Responsable_maj}></textarea>
+
+
+</td>
+<td>
+<textarea onChange={(e)=>tablo[index].Periodicite=e.target.value} defaultValue=     {lol.Periodicite}></textarea>
+
+
+</td>
+<td>
+<span onClick={()=>rowok(index)} className="material-symbols-outlined point">done</span> 
+<span onClick={()=>rowdelete(index)} class="material-symbols-outlined point">close</span>  
+
+</td>
+</tr>)
+  })
+  console.log(tablo)
   let bool = true;
+  let bool1 = true;
   var inpage = page.map((temp,index)=>{
 
     if(temp.type==="input"){
@@ -68,6 +150,14 @@ function Test(){
     <span onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span></div>)
 
     }
+    if(temp.type === "halflib"){
+      data[index] = temp.contenue
+      // (()=>{setHalf(...half,1)})
+      return (<span className={bool ? 'flextext1 half1' : 'flextext nass'}><input onChange={(e)=>data[index]=e.target.value}  className='label' type="text" defaultValue={temp.contenue}></input>
+      
+      {bool = !bool}
+      <span onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
+    }
 
     if(temp.type === "halfinput"){
       data[index] = temp.contenue
@@ -77,13 +167,69 @@ function Test(){
       {bool = !bool}
       <span onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
+    if(temp.type === "thirdlib"){
+
+      data[index] = temp.contenue
+      if(counter>2){counter = 0 ; bool1 = true }
+      counter+=1;
+      // (()=>{setHalf(...half,1)})
+      return (<span className={bool1 ? `flextext1 libthird${counter}`  : 'flextext nass' }><input onChange={(e)=>data[index]=e.target.value}  className='label' type="text" defaultValue={temp.contenue}></input>
+      
+      { counter==2 ? ( bool1 = !bool1 ) :  ( bool1 = bool1)}
+      
+      {console.log(counter)}
+ 
+      
+      <span onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
+    }
+    if(temp.type === "thirdinput"){
+
+      data[index] = temp.contenue
+      if(counter>2){counter = 0 ; bool1 = true }
+      counter+=1;
+      // (()=>{setHalf(...half,1)})
+      return (<span className={bool1 ? `flextext halfthird${counter}`  : 'flextext nass' }><textarea onChange={(e)=>data[index]=e.target.value}  className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
+      
+      { counter==2 ? ( bool1 = !bool1 ) :  ( bool1 = bool1)}
+      
+      {console.log(counter)}
+ 
+      
+      <span onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
+    }
     
     if(temp.type==="textarea"){
 
       data[index]=temp.contenue
-      return (<div className='flextext big'><textarea  onChange={(e)=>data[index]=e.target.value}  className='textarea' defaultValue={temp.contenue}></textarea>
-          <span  onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span></div>)
-    }
+      return <div className='flextext big'><textarea  onChange={(e)=>data[index]=e.target.value}  className='textarea' defaultValue={temp.contenue}></textarea>
+          <span  onClick={()=>todone(temp.idelement,index)} className="material-symbols-outlined point">done</span> <span onClick={()=>todelete(temp.idelement)} class="material-symbols-outlined point">close</span>
+  </div>
+
+  
+  }
+
+  if(temp.type === 'table'){
+    return(
+      <table className='table-left' >
+         <tbody>
+        <tr>
+          <th>Nom Indicateur</th>
+          <th>Définition</th>
+          <th>Formule</th>
+          <th>Résponsable Mise à Jour</th>
+          <th>Périodicité</th>
+          <th><span  onClick={()=>todelete(temp.idelement)} className="material-symbols-outlined point outred">close</span></th>
+        </tr>
+        
+     
+          {per}
+      
+        </tbody>
+      </table>
+    )
+
+
+  }
     
     
 
@@ -97,8 +243,11 @@ function Test(){
     <ul class="sidebar1 fixed">
       <img src={logo} width="230px"></img>
       <li onClick={input}><a href="#">Libellé</a></li>
+      <li onClick={semilibellé}><a href="#">1/2 Libellé</a></li>
+      <li onClick={thirdzonelibellé}><a href="#">1/3 Libellé</a></li>
       <li onClick={textarea}><a href="#">Zone de text</a></li>
       <li onClick={semizonetext}><a href="#">1/2 Zone de text</a></li>
+      <li onClick={thirdzonetext}><a href="#">1/3 Zone de text</a></li>
       <li onClick={table}><a href="#">Table</a></li>
       </ul>
     {inpage}

@@ -851,8 +851,8 @@ app.post('/api/updateelement',(req,res)=>{
     
   )
 
-app.post('/api/deleteelement',(req,res)=>{
-    let id=req.body.id
+app.get('/api/deleteelement',(req,res)=>{
+    let id=req.query.id
 
     db.query('delete from ciprocessus where idelement = ?',[id],(err,result)=>{
     if(err) res.send(err)
@@ -880,8 +880,64 @@ app.post('/api/addsemiinput',(req,res)=>{
     else res.send(result)
     })
 })
+// api/addsemilibelle
+app.post('/api/addsemilibelle',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("halflib",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+app.post('/api/addthirdinput',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("thirdinput",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+// thirdzonelibellé
+app.post('/api/thirdzonelib',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("thirdlib",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+app.get('/api/getperformance',(req,res)=>{
 
+  db.query('select * from  indi_performance',(err,result)=>{
+    if(!err)res.send(result)
+    else res.send(err)
 
+  })
+ 
+}
+  
+)
+// /api/addtable
+app.post('/api/addtable',(req,res)=>{
+  db.query('insert into ciprocessus(type,contenue) values("table",null)',(err,result)=>{
+    if(err) res.send(err)
+    else res.send(result)
+    })
+})
+app.post('/api/updaterow',(req,res)=>{
+  let data = req.body.data;
+  console.log(data);
+  db.query("UPDATE indi_performance Set Nom_indicateur=?,Definition=?,Formule=?,Responsable_maj = ? ,Periodicite =  ? WHERE idIndi_Performance = ?",[data.Nom_indicateur,data.Definition,data.Formule,data.Responsable_maj,data.Periodicite,data.idIndi_Performance],(err,result)=>{
+    if(!err) console.log(result);
+    else{
+      console.log(err)
+    }
+  })
+})
+app.post('/api/deleterow',(req,res)=>{
+  let data = req.body.data;
+  console.log(data);
+  db.query("delete from indi_performance where idIndi_Performance = ?",[data],(err,result)=>{
+    if(!err) console.log(result);
+    else{
+      console.log(err)
+    }
+  })
+})
 
 app.listen(3002,()=>{
     console.log("running on 3002")

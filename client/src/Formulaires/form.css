@@ -3,19 +3,26 @@
     margin: 10px;
     width: 100%;
     height: 150px;
+    margin-bottom: 80px;
 }
 .label{
-    
+    border-width: 0px;
+    height: 50px;
     margin: 10px;
     margin-left: 17vw;
-    height:30px;
+    padding-left: 15px;
     width: 15vw;
 }
+
 .textarea{
+
+    border-width: 0;
     width:100%;
     height: 150px;
     margin:10px;
     margin-left: 17vw;
+    padding:10px;
+    margin-bottom: 70px;
 }
 .flextext{
 
@@ -25,11 +32,11 @@
 
 .flextext1{
 
-    width: 100%;
     display: flex;
     align-items: center;
 }
 .half{
+    border-width: 0;
 
     display:flex;
     float: left;
@@ -37,8 +44,17 @@
     margin-left: 16.4vw;
     
 }
+.half1{
+    border-width: 0;
+
+    display:flex;
+    float: left;
+    width:42% ;
+    
+}
 .nass{
         margin-left: 17vw;
+        border-width: 0;
 
     display:flex;
   
@@ -48,11 +64,48 @@
 .half textarea{
     width:100% ;
     height: 150px;
+    border-width: 0;
 
 }
 .big{
     clear:both;
     width:100%;
+    border-width: 0;
+
+}
+
+.halfthird1{
+    display:flex;
+    float: left;
+    width:28% ;
+    margin-left: 16.4vw;
+    border-width: 0;
+
+}
+.halfthird2{
+
+    display:flex;
+    float: left;
+    width:28% ;
+    border-width: 0;
+
+    
+}
+.libthird1{
+    display:flex;
+    float: left;
+    width:28% ;
+
+    border-width: 0;
+
+}
+.libthird2{
+
+    display:flex;
+    float: left;
+    width: 28vw;
+
+    border-width: 0;
 
 }
 
@@ -134,3 +187,35 @@
     font-size: 18px;
     line-height: 60px;
     }
+.table-left{
+   
+    background-color: white;
+    border-radius: 10px;
+   
+    width: 50vw;
+   
+    margin:20px 0 70px 14vw;
+}
+.table-left textarea{
+   
+    width: 14vw;
+    height: 10vh;
+}
+
+.table-left td {
+    padding: 10px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+.outred{
+    color:red;
+    font-size: 50px;
+}
+
+.flextext10{
+    position: relative;
+    left:42vw;
+    border-width: 0;
+
+}
+
