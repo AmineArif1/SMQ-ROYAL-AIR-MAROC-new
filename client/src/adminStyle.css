@@ -20,7 +20,7 @@ body{
    
     width: 100%;
     /* padding:0; */
-    background: linear-gradient(to right, rgba(228, 80, 80, 0.4) 0%, rgb(243,246,253) 100%);
+    background: linear-gradient(to right, rgba(228, 80, 80, 0.4) 0%, rgb(232 238 252) 100%);
     display: flex;
     align-items: center;
     padding: 2vh;

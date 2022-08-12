@@ -576,7 +576,7 @@ app.get("/api/getfileid",(req,res)=>{
   })
 }})})
 app.get('/api/download', function(req, res){
-  jwt.verify(req.query.answer,'my_secret_key',function(err,data){
+  jwt.verify(req.query.token,'my_secret_key',function(err,data){
     if(err){
       res.sendStatus(403);
     }else{

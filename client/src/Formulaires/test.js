@@ -10,6 +10,12 @@ function Test(){
   let [performance,setPerformace]= useState([]);
   let [tablo,setTablo]= useState([]);
   let [ deletor , setDeletor] = useState([])
+  let [ nom,setNom] = useState();
+  let [def , setDef] = useState();
+  let [form , setForm ] = useState();
+  let [Responsable,setResponsable] = useState();
+  let [period, setPeriod ] = useState();
+  let [ threepoint , setThreepoint] = useState();
   let counter = 0;
 
   useEffect(()=>{
@@ -225,6 +231,7 @@ function Test(){
           {per}
       
         </tbody>
+        <button onClick={()=>setThreepoint(true)}>Add</button>
       </table>
     )
 
@@ -252,7 +259,27 @@ function Test(){
       </ul>
     {inpage}
     
+    {threepoint &&   <> <div className="add-proc" >
+    <div className="graybackground1"></div>
+
+      {/* <div className="flex"><div className="temp-left" >Processus :</div><input value={proc} className="temp-right" type="text" onChange={(e)=>{setProc(e.target.value)}}></input></div> */}
+      <div className="flex">  <div className="temp-left">Nom Indicateur:</div>  <textarea  className="temp-right" type="text" onChange={(e)=>{setNom(e.target.value)}}></textarea></div>
+      <div className="flex">    <div className="temp-left">Définition :</div><textarea  className="temp-right"  onChange={(e)=>{setDef(e.target.value)}}></textarea></div>
+      <div className="flex">  <span className="temp-left">Formule :</span><textarea  className="temp-right" onChange={(e)=>{setForm(e.target.value)}}></textarea> </div>
+      <div className="flex">  <span className="temp-left">Responsable Mise à Jour</span> <textarea  className="temp-right" onChange={(e)=>{setResponsable(e.target.value)}}></textarea></div>
+      <div className="flex">  <span className="temp-left">Périodicité</span> <textarea  className="temp-right" onChange={(e)=>{setPeriod(e.target.value)}}></textarea></div>
       
+</div>  
+<button className="button1 point" onClick={()=>{setThreepoint(false)}}>Enregistrer</button>
+<button className="button2 point" onClick={()=>{setThreepoint(false);}} >Annuler</button>
+
+
+<h1 className="title">Modifier Processus</h1>
+         
+           <span  class="material-symbols-outlined point quit4 point" onClick={()=>{setThreepoint(false);}}>
+cancel
+</span>
+</>}     
     </>
     )
       

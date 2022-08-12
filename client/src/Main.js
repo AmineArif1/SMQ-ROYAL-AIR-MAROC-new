@@ -212,7 +212,7 @@ export default function Main(props){
     var today  = new Date();
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     function download(name){
-        window.open(`http://localhost:3002/api/download?filename=${name}`, '_blank');
+        window.open(`http://localhost:3002/api/download?filename=${name}&token=${window.token}`, '_blank');
         axios.get('http://localhost:3002/api/download',{params:{filename:name,answer:window.token}}).then(()=>{})
     }
     function transition(){
