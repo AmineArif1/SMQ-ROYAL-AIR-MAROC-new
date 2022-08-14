@@ -999,9 +999,39 @@ app.get('/api/getperformance',(req,res)=>{
 }
   
 )
+app.post('/api/updateallpage',(req,res)=>{
+
+ console.log(req.body.data1)
+ console.log(req.body.user)
+ db.query("delete from ciprocessus where user_id = ?",[req.body.user],(err,result)=>{if(err) console.log(err)})
+
+ for (const [key, value] of Object.entries(req.body.data1)) {
+  if(key.split('+')[1]==='table'){
+    value.forEach(item =>{
+      let nom=item.Nom_indicateur
+      let def=item.Definition
+      let form=item.Formule
+      let Responsable=item.Responsable;
+      let period=item.Periodicite;
+    
+    
+      db.query("delete from indi_performance ",(err,result)=>{if(err)console.log(err)})
+
+      db.query("insert into  indi_performance(Nom_indicateur,Definition,Formule,Responsable_maj,Periodicite) values (?,?,?,?,?) ",[nom,def,form,Responsable,period],(err,result)=>{if(err) console.log(err)})
+})
+  }
+ 
+    db.query("insert into ciprocessus(type,contenue,user_id) values(?,?,?)",[key.split('+')[1],value,req.body.user])
+  
+  
+
+}
+  
+})
 // /api/addtable
 app.post('/api/addtable',(req,res)=>{
-  db.query('insert into ciprocessus(type,contenue) values("table",null)',(err,result)=>{
+  console.log(req.body.user)
+  db.query('insert into ciprocessus(type,contenue,user_id) values("table",null,?)',[req.body.user],(err,result)=>{
     if(err) res.send(err)
     else res.send(result)
     })

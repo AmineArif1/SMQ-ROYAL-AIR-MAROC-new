@@ -6,6 +6,7 @@ import { useHistory, useParams} from "react-router-dom";
 function Test() {
   var [page, setPage] = useState([]);
   var [data, setData] = useState({});
+  var [data1, setData1] = useState({});
   var [half, setHalf] = useState([]);
   let [performance, setPerformace] = useState([]);
   let [tablo, setTablo] = useState([]);
@@ -16,6 +17,7 @@ function Test() {
   let [Responsable, setResponsable] = useState();
   let [period, setPeriod] = useState();
   let [threepoint, setThreepoint] = useState();
+  let [bigIndex , setBigIndex] = useState(0);
   let counter = 0;
   let { userid } = useParams();
   console.log(userid)
@@ -102,7 +104,7 @@ function Test() {
     )
   }
   function table() {
-    axios.post("http://localhost:3002/api/addtable").then(
+    axios.post("http://localhost:3002/api/addtable",{"user":userid}).then(
       axios.get("http://localhost:3002/api/getpage",{params:{id:userid}}).then((response) => {
 
         setPage(response.data)
@@ -141,31 +143,36 @@ function Test() {
     return (
       <tr>
         <td>
-          <textarea onChange={(e) => tablo[index].Nom_indicateur = e.target.value} defaultValue={lol.Nom_indicateur}></textarea>
+          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}} defaultValue={lol.Nom_indicateur}></textarea>
         </td>
         <td>
-          <textarea onChange={(e) => tablo[index].Definition = e.target.value} defaultValue={lol.Definition}></textarea>
+          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}}defaultValue={lol.Definition}></textarea>
         </td>
         <td>
-          <textarea onChange={(e) => tablo[index].Formule = e.target.value} defaultValue={lol.Formule}></textarea>
-
-        </td>
-        <td>
-          <textarea onChange={(e) => tablo[index].Responsable_maj = e.target.value} defaultValue={lol.Responsable_maj}></textarea>
-
+          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}} defaultValue={lol.Formule}></textarea>
 
         </td>
         <td>
-          <textarea onChange={(e) => tablo[index].Periodicite = e.target.value} defaultValue={lol.Periodicite}></textarea>
+          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}} defaultValue={lol.Responsable_maj}></textarea>
 
 
         </td>
+        <td>
+          <textarea onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo;console.log(data1)}} defaultValue={lol.Periodicite}></textarea>
+
+
+        </td>
+        
+   
+    
         <td>
           <span onClick={() => rowok(index)} className="material-symbols-outlined point">done</span>
           <span onClick={() => rowdelete(index)} class="material-symbols-outlined point">close</span>
 
         </td>
-      </tr>)
+       
+      </tr>
+      )
   })
   console.log(tablo)
   let bool = true;
@@ -173,37 +180,43 @@ function Test() {
   var inpage = page.map((temp, index) => {
 
     if (temp.type === "input") {
-
-
+      data1[bigIndex+'+input'] = temp.contenue
+      bigIndex = bigIndex+1
       data[index] = temp.contenue
-      return (<div className='flextext1'><input onChange={(e) => data[index] = e.target.value} className='label' type="text" defaultValue={temp.contenue}></input>
+      return (<div className='flextext1'><input onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+input'] = e.target.value}} className='label' type="text" defaultValue={temp.contenue}></input>
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></div>)
 
     }
     if (temp.type === "halflib") {
+      data1[bigIndex+'+halflib'] = temp.contenue
+      bigIndex = bigIndex+1
       data[index] = temp.contenue
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool ? 'flextext1 half1' : 'flextext nass'}><input onChange={(e) => data[index] = e.target.value} className='label' type="text" defaultValue={temp.contenue}></input>
+      return (<span className={bool ? 'flextext1 half1' : 'flextext nass'}><input onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+halflib'] = e.target.value}} className='label' type="text" defaultValue={temp.contenue}></input>
 
         {bool = !bool}
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
 
     if (temp.type === "halfinput") {
+      data1[bigIndex+'+halfinput'] = temp.contenue
+      bigIndex = bigIndex+1
       data[index] = temp.contenue
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool ? 'flextext half' : 'flextext nass'}><textarea onChange={(e) => data[index] = e.target.value} className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
+      return (<span className={bool ? 'flextext half' : 'flextext nass'}><textarea onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+halfinput'] = e.target.value}}className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
 
         {bool = !bool}
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
     if (temp.type === "thirdlib") {
+      data1[bigIndex+'+thirdlib'] = temp.contenue
+      bigIndex = bigIndex+1
 
       data[index] = temp.contenue
       if (counter > 2) { counter = 0; bool1 = true }
       counter += 1;
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool1 ? `flextext1 libthird${counter}` : 'flextext nass'}><input onChange={(e) => data[index] = e.target.value} className='label' type="text" defaultValue={temp.contenue}></input>
+      return (<span className={bool1 ? `flextext1 libthird${counter}` : 'flextext nass'}><input onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+thirdlib'] = e.target.value}} className='label' type="text" defaultValue={temp.contenue}></input>
 
         {counter == 2 ? (bool1 = !bool1) : (bool1 = bool1)}
 
@@ -213,12 +226,14 @@ function Test() {
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
     if (temp.type === "thirdinput") {
+      data1[bigIndex+'+thirdinput'] = temp.contenue
+      bigIndex = bigIndex+1
 
       data[index] = temp.contenue
       if (counter > 2) { counter = 0; bool1 = true }
       counter += 1;
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool1 ? `flextext halfthird${counter}` : 'flextext nass'}><textarea onChange={(e) => data[index] = e.target.value} className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
+      return (<span className={bool1 ? `flextext halfthird${counter}` : 'flextext nass'}><textarea onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+thirdinput'] = e.target.value}} className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
 
         {counter == 2 ? (bool1 = !bool1) : (bool1 = bool1)}
 
@@ -229,9 +244,11 @@ function Test() {
     }
 
     if (temp.type === "textarea") {
+      data1[bigIndex+'+textarea'] = temp.contenue
+      bigIndex = bigIndex+1
 
       data[index] = temp.contenue
-      return <div className='flextext big'><textarea onChange={(e) => data[index] = e.target.value} className='textarea' defaultValue={temp.contenue}></textarea>
+      return <div className='flextext big'><textarea onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+textarea'] = e.target.value}} className='textarea' defaultValue={temp.contenue}></textarea>
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span>
       </div>
 
@@ -239,6 +256,8 @@ function Test() {
     }
 
     if (temp.type === 'table') {
+      data1[bigIndex+'+table'] = temp.contenue
+      bigIndex = bigIndex+1
       return (
         <table className='table-left' >
           <tbody>
@@ -280,7 +299,10 @@ function Test() {
 
 
   })
-
+  function confirmall(){
+    axios.post("http://localhost:3002/api/updateallpage",{'data1':data1,'user':userid})
+    setData1({})
+  }
   return (
     <>
 
@@ -295,7 +317,7 @@ function Test() {
         <li onClick={table}><a href="#">Table</a></li>
       </ul>
       {inpage}
-
+      <button className='flex goleft' onClick={()=>confirmall()}>confirm all changes</button>
      
     </>
   )
