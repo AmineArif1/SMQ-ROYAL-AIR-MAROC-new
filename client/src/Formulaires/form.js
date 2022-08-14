@@ -17,10 +17,10 @@ function Test() {
   let [Responsable, setResponsable] = useState();
   let [period, setPeriod] = useState();
   let [threepoint, setThreepoint] = useState();
-  let [bigIndex , setBigIndex] = useState(0);
   let counter = 0;
   let { userid } = useParams();
   console.log(userid)
+  var [ee,setEe]= useState(1)
   let history = useHistory();
 
  function okrow(){
@@ -138,85 +138,93 @@ function Test() {
 
     )
   }
-  var per = performance.map((lol, index) => {
+  // var per = performance.map((lol, index) => {
   
-    return (
-      <tr>
-        <td>
-          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}} defaultValue={lol.Nom_indicateur}></textarea>
-        </td>
-        <td>
-          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}}defaultValue={lol.Definition}></textarea>
-        </td>
-        <td>
-          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}} defaultValue={lol.Formule}></textarea>
+  //   return (
+  //     <tr>
+  //       <td>
+  //         <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[+'+table'] = tablo}} defaultValue={lol.Nom_indicateur}></textarea>
+  //       </td>
+  //       <td>
+  //         <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[+'+table'] = tablo}}defaultValue={lol.Definition}></textarea>
+  //       </td>
+  //       <td>
+  //         <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[+'+table'] = tablo}} defaultValue={lol.Formule}></textarea>
 
-        </td>
-        <td>
-          <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo}} defaultValue={lol.Responsable_maj}></textarea>
-
-
-        </td>
-        <td>
-          <textarea onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[bigIndex-1+'+table'] = tablo;console.log(data1)}} defaultValue={lol.Periodicite}></textarea>
+  //       </td>
+  //       <td>
+  //         <textarea  onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[+'+table'] = tablo}} defaultValue={lol.Responsable_maj}></textarea>
 
 
-        </td>
+  //       </td>
+  //       <td>
+  //         <textarea onChange={(e) => {tablo[index].Periodicite = e.target.value; data1[+'+table'] = tablo;console.log(data1)}} defaultValue={lol.Periodicite}></textarea>
+
+
+  //       </td>
         
    
     
-        <td>
-          <span onClick={() => rowok(index)} className="material-symbols-outlined point">done</span>
-          <span onClick={() => rowdelete(index)} class="material-symbols-outlined point">close</span>
+  //       <td>
+  //         <span onClick={() => rowok(index)} className="material-symbols-outlined point">done</span>
+  //         <span onClick={() => rowdelete(index)} class="material-symbols-outlined point">close</span>
 
-        </td>
+  //       </td>
        
-      </tr>
-      )
-  })
-  console.log(tablo)
+  //     </tr>
+  //     )
+  // })
   let bool = true;
   let bool1 = true;
+  function testest(e,index){
+    data1[index+'+input'] = e.target.value;
+    console.log(index)
+  }
   var inpage = page.map((temp, index) => {
 
+
     if (temp.type === "input") {
-      data1[bigIndex+'+input'] = temp.contenue
-      bigIndex = bigIndex+1
+      data1[ee+'+input'] = temp.contenue;
+      let weird = ee;
+      ee=ee+1;
+   
       data[index] = temp.contenue
-      return (<div className='flextext1'><input onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+input'] = e.target.value}} className='label' type="text" defaultValue={temp.contenue}></input>
+      return (<div className='flextext1'><input onChange={(e) => {data[index] = e.target.value;testest(e,weird);console.log();console.log(data1)}} className='label' type="text" defaultValue={temp.contenue}></input>
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></div>)
 
     }
     if (temp.type === "halflib") {
-      data1[bigIndex+'+halflib'] = temp.contenue
-      bigIndex = bigIndex+1
+      data1[ee+'+halflib'] = temp.contenue
+      let weird = ee;
+      ee=ee+1
       data[index] = temp.contenue
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool ? 'flextext1 half1' : 'flextext nass'}><input onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+halflib'] = e.target.value}} className='label' type="text" defaultValue={temp.contenue}></input>
+      return (<span className={bool ? 'flextext1 half1' : 'flextext nass'}><input onChange={(e) => {data[index] = e.target.value;data1[weird+'+halflib'] = e.target.value;console.log(data1)}} className='label' type="text" defaultValue={temp.contenue}></input>
 
         {bool = !bool}
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
 
     if (temp.type === "halfinput") {
-      data1[bigIndex+'+halfinput'] = temp.contenue
-      bigIndex = bigIndex+1
+      data1[ee+'+halfinput'] = temp.contenue;
+      let weird = ee;
+      ee=ee+1;
       data[index] = temp.contenue
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool ? 'flextext half' : 'flextext nass'}><textarea onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+halfinput'] = e.target.value}}className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
+      return (<span className={bool ? 'flextext half' : 'flextext nass'}><textarea onChange={(e) => {data[index] = e.target.value;data1[weird+'+halfinput'] = e.target.value;console.log(data1)}}className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
 
         {bool = !bool}
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
     if (temp.type === "thirdlib") {
-      data1[bigIndex+'+thirdlib'] = temp.contenue
-      bigIndex = bigIndex+1
-
+      data1[ee+'+thirdlib'] = temp.contenue
+      let weird = ee;
+      ee=ee+1
       data[index] = temp.contenue
       if (counter > 2) { counter = 0; bool1 = true }
       counter += 1;
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool1 ? `flextext1 libthird${counter}` : 'flextext nass'}><input onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+thirdlib'] = e.target.value}} className='label' type="text" defaultValue={temp.contenue}></input>
+      return (<span className={bool1 ? `flextext1 libthird${counter}` : 'flextext nass'}><input onChange={(e) => {data[index] = e.target.value;data1[weird+'+thirdlib'] = e.target.value;console.log(data1)}} className='label' type="text" defaultValue={temp.contenue}></input>
 
         {counter == 2 ? (bool1 = !bool1) : (bool1 = bool1)}
 
@@ -226,14 +234,14 @@ function Test() {
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span></span>)
     }
     if (temp.type === "thirdinput") {
-      data1[bigIndex+'+thirdinput'] = temp.contenue
-      bigIndex = bigIndex+1
-
+      data1[ee+'+thirdinput'] = temp.contenue
+      let weird = ee;
+      ee=ee+1
       data[index] = temp.contenue
       if (counter > 2) { counter = 0; bool1 = true }
       counter += 1;
       // (()=>{setHalf(...half,1)})
-      return (<span className={bool1 ? `flextext halfthird${counter}` : 'flextext nass'}><textarea onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+thirdinput'] = e.target.value}} className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
+      return (<span className={bool1 ? `flextext halfthird${counter}` : 'flextext nass'}><textarea onChange={(e) => {data[index] = e.target.value;data1[weird+'+thirdinput'] = e.target.value;console.log(data1)}} className='labelarea' type="text" defaultValue={temp.contenue}></textarea>
 
         {counter == 2 ? (bool1 = !bool1) : (bool1 = bool1)}
 
@@ -244,11 +252,13 @@ function Test() {
     }
 
     if (temp.type === "textarea") {
-      data1[bigIndex+'+textarea'] = temp.contenue
-      bigIndex = bigIndex+1
-
+      
+      data1[ee+'+textarea'] = temp.contenue
+      let weird = ee;
+      ee=ee+1
       data[index] = temp.contenue
-      return <div className='flextext big'><textarea onChange={(e) => {data[index] = e.target.value;data1[bigIndex-1+'+textarea'] = e.target.value}} className='textarea' defaultValue={temp.contenue}></textarea>
+      return <div className='flextext big'><textarea onChange={(e) => {data[index] = e.target.value;data1[weird+'+textarea'] = e.target.value;console.log(data1)
+    }} className='textarea' defaultValue={temp.contenue}></textarea>
         <span onClick={() => todone(temp.idelement, index)} className="material-symbols-outlined point">done</span> <span onClick={() => todelete(temp.idelement)} class="material-symbols-outlined point">close</span>
       </div>
 
@@ -256,8 +266,7 @@ function Test() {
     }
 
     if (temp.type === 'table') {
-      data1[bigIndex+'+table'] = temp.contenue
-      bigIndex = bigIndex+1
+      data1['+table'] = temp.contenue
       return (
         <table className='table-left' >
           <tbody>
@@ -271,7 +280,7 @@ function Test() {
             </tr>
 
 
-            {per}
+            {/* {per} */}
             {threepoint && <tr>
               <td><textarea  type="text" onChange={(e) => { setNom(e.target.value) }}></textarea></td>
               <td><textarea  onChange={(e) => { setDef(e.target.value) }}></textarea></td>
@@ -290,6 +299,7 @@ function Test() {
           <button onClick={() => setThreepoint(true)}>Add</button>
         </table>
       )
+
 
 
     }
