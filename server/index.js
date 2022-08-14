@@ -106,10 +106,16 @@ app.post("/api/addUser",(req,res)=>{
       console.log("this")
       if(err){
         
-        console.log({err:err})
-        res.send(err)
+        
       }
+      db.query("select id from users where email = ? and password = ?", [username,password],(err,result)=>{
+        db.query("insert into ciprocessus(type,contenue,user_id) values('input','rôle du processus :',?),('textarea',null,?),('halflib','Entrée',?),('halflib','Sorties',?),('halfinput',null,?),('halfinput',null,?),('halflib','Acteurs',?),('halflib','Ressources Essentiels',?),('halfinput',null,?),('halfinput',null,?),('input','Principaux documents et données associées',?),('thirdlib','Documents internes',?),('thirdlib','Documents externes',?),('thirdlib','Enregistrements',?),('thirdinput',null,?),('thirdinput',null,?),('thirdinput',null,?),('input','Méthodes de surveillance et messure de processus',?),('textarea','Revue Processus             : 1 par an et à la demande Audit interne qualité       : 1 par an et à la demande Enquête de satisfaction   : 20 par an et à la demande processus de réalisation.',?),('input','Indicateur Performance :',?),('table',null,?)",[result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id,result[0].id],(err,result)=>{
+          if(err) console.log(err)
+          console.log(result)
+        })
+      })
       res.send(result)
+   
       // http://localhost:3002/api/addUser
   
   })
@@ -117,8 +123,24 @@ app.post("/api/addUser",(req,res)=>{
    }
    })})
    
-   
+  //  /api/insertfirstable
+  app.post("/api/insertfirstable",(req,res)=>{
+
+    let nom=req.body.nom
+    let def=req.body.def;
+    let form=req.body.form;
+    let Responsable=req.body.Responsable;
+    let period=req.body.period;
   
+  
+  
+    db.query("insert into  indi_performance(Nom_indicateur,Definition,Formule,Responsable_maj,Periodicite) values (?,?,?,?,?) ",[nom,def,form,Responsable,period],(err,result)=>{
+      if(!err) return res.send(result)
+      res.send(err)
+    }
+  )})
+      
+     
 
 
 // }
@@ -312,7 +334,7 @@ app.post("/api/addproc",(req,res)=>{
     "insert into dossier(libellé,id_doss) values(?,?)",
     [proc,id],
     
-    (err,result)=>{
+    (err,result)=>{ 
    
     if(err){
       
@@ -343,12 +365,40 @@ app.post("/api/addprocname",(req,res)=>{
       console.log({err:err})
       res.send(err)
     }
-    res.send(result)
+    db.query("select id_processus from dossier where libellé = 'Dossier de base' and id_doss = ?",[id],(err,result)=>{
+      if(err) res.send(err)
+      else{
+        res.send(result)
+      }
+    })
     // http://localhost:3002/api/addUser
 
 })
 }
 })})
+
+
+// /api/addformulaires
+
+app.post("/api/addformname",(req,res)=>{
+
+    let id=req.body.id;
+    console.log(id)
+    db.query(
+    "insert into list_form(Nom,dossier_par) values('Carte d''identité',?), ('CR Revue de Processus',?), (' Modèle Regles de Maîtrise des Documents Externe',?),(' Modèle Regles de Maîtrise des Documents Internes',?),('Maîtrise des Informations Documentées',?),('Surveillance et Gestion des NC',?)",
+    [id,id,id,id,id,id],
+    (err,result)=>{
+    if(err){
+      
+      console.log({err:err})
+    }
+    res.send(result)
+  
+  
+  
+
+}) }
+)
 app.post("/api/addprocroot",(req,res)=>{
   jwt.verify(req.body.answer,'my_secret_key',function(err,data){
     if(err){
@@ -387,6 +437,33 @@ app.post("/api/procdelete1",(req,res)=>{
     try{
     db.query(
     "delete from dossier where id_processus = ?",
+    [id],
+    (err,result)=>{
+   
+    if(err){
+      
+      console.log({err:err})
+    }
+    res.send(result)
+    
+  
+  
+
+}) }
+catch(err){
+// console.log(err)
+}}
+})})
+app.post("/api/Formdelete1",(req,res)=>{
+  jwt.verify(req.body.answer,'my_secret_key',function(err,data){
+    if(err){
+      res.sendStatus(403);
+    }else{
+    let id=req.body.id;
+    console.log(id)
+    try{
+    db.query(
+    "delete from list_form where idlist_form = ?",
     [id],
     (err,result)=>{
    
@@ -775,6 +852,16 @@ app.post("/api/addprocessus",(req,res)=>{
           res.send(err)
         }
         )}})})
+
+app.get("/api/getform",(req,res)=>{
+  db.query('select Nom,idlist_form from list_form where dossier_par = ? ',[req.query.id],(err,result1)=>{
+    if(!err){
+      res.send(result1)
+    }
+    else res.send(err)
+  })
+  
+})
 app.get("/api/getdoss",(req,res)=>{
   jwt.verify(req.query.answer,'my_secret_key',function(err,data){
     if(err){
@@ -790,8 +877,9 @@ app.get("/api/getdoss",(req,res)=>{
     
     console.log(result1[0].libellé.split(" ")[0])
   db.query("select id_user from processus where id_proc = ? ",[result1[0].libellé.split(" ")[0]],(err,result)=>{
-    if(!err) 
+    if(!err) {
     res.send(result);
+    console.log("wowowowowow",result1[0].libellé.split(" ")[0],);}
      
     else res.send(err)
   })
@@ -825,8 +913,8 @@ app.get('/api/editdoss',(req,res)=>{
      db.query('update dossier set libellé = ? where id_processus = ?',[req.query.lib,req.query.id])
 }})})
 app.get('/api/getpage',(req,res)=>{
-
-    db.query('select * from  ciprocessus',(err,result)=>{
+  console.log(req.query.id)
+    db.query('select * from  ciprocessus where user_id = ?',[req.query.id],(err,result)=>{
       res.send(result)
     })
    

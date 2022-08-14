@@ -8,7 +8,7 @@ import {BrowserRouter as Router, Route,Switch} from "react-router-dom"
 import 'react-toastify/dist/ReactToastify.css';
 
 import {ToastContainer} from 'react-toastify';
-import Test from './Formulaires/test'
+import Form from './Formulaires/form'
 import './Formulaires/form.css'
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
       <Route exact path="/Main/:userid" component={()=><Main authorized={authorized}/>}/>
       <Route exact path="/fichier/:id" component={()=><Fichier authorized={authorized}/>}/>
       <Route exact path="/Admin/" component={()=><Admin authorized={authorized}/>}/>
-      <Route exact path="/test" component={()=><Test/>}/>
+      <Route exact path="/Carted'identité/:userid" component={()=><Form/>}/>
     </Switch>
    </Router>
   );

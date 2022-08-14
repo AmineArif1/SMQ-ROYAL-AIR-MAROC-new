@@ -78,7 +78,10 @@ more_vert
             answer:window.token
             // /api/addprocname
         }).then((response)=>{axios.post('http://localhost:3002/api/addprocroot',{"processus":proc+" - "+titre,answer:window.token}).then((response)=>{
-            axios.post('http://localhost:3002/api/addprocname',{"id":response.data[0].id_processus,answer:window.token})  ;
+            axios.post('http://localhost:3002/api/addprocname',{"id":response.data[0].id_processus,answer:window.token}).then(
+                (response)=>{
+                    axios.post('http://localhost:3002/api/addformname',{"id":response.data[0].id_processus,answer:window.token}).then()
+                }            )  ;
         })  ;
 
 

@@ -38,6 +38,7 @@ Axios.post('http://localhost:3002/api/login',{
             history.push('/Admin')
         }
         else{
+            window.thisguy = response.data.result[0].id;
             history.push(`/Main/${response.data.result[0].id}`);
         }
     })
