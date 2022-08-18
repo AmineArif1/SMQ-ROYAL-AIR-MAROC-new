@@ -69,7 +69,7 @@ more_vert
 
     function submitproc(){
         setIsLoading(true);
-
+        console.log(pilote)
         axios.post("http://localhost:3002/api/addprocessus",{
             "id_proc":proc,
             "titre":titre,

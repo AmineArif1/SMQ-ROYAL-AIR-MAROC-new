@@ -23,7 +23,8 @@ function App() {
       <Route exact path="/Main/:userid" component={()=><Main authorized={authorized}/>}/>
       <Route exact path="/fichier/:id" component={()=><Fichier authorized={authorized}/>}/>
       <Route exact path="/Admin/" component={()=><Admin authorized={authorized}/>}/>
-      <Route exact path="/Carted'identité/:userid" component={()=><Form/>}/>
+      <Route exact path="/Carted'identité/:userid" component={()=><Form well = {"ci"}/>}/>
+      <Route exact path="/CRRevuedeProcessus/:userid" component={()=><Form well = {"rp"}/>}/>
     </Switch>
    </Router>
   );

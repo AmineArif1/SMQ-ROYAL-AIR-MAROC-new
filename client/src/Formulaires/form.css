@@ -226,3 +226,32 @@
 .goleft{
     margin-left: 726px;
 }
+.top-bar-form{
+    background-color: rgb(158, 25, 46);
+    width: 100%;
+    height: 20vh;
+}
+.bigtitle{
+    color: white;
+    position: absolute;
+    font-size: 70px;
+    left:40vw;
+    top:5vh;
+    z-index: 100;
+}
+.alldone{
+    color:white;
+    z-index: 99900;
+    font-size: 80px;
+    position: absolute;
+    left:90vw;
+    top:2vw;
+}
+.date{
+    color:white;
+    z-index: 99999;
+    font-size: 20px;
+    position: absolute;
+    left:15vw;
+    top:15vh;
+}
