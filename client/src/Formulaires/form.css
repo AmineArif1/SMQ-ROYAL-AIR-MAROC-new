@@ -188,7 +188,8 @@
     line-height: 60px;
     }
 .table-left{
-   
+    border-collapse: collapse;
+
     background-color: white;
     border-radius: 10px;
    
@@ -255,3 +256,4 @@
     left:15vw;
     top:15vh;
 }
+

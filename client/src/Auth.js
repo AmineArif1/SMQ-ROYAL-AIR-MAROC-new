@@ -12,12 +12,12 @@ function Auth(){
     let [inputval,setInputval]=useState([]);
     let [response,setResponse]=useState('');
     let [screen,setScreen]=useState([
-        <div className="container">,
+        <div className="container">
         <img className="logo" src='https://upload.wikimedia.org/wikipedia/commons/b/bf/Logo_Royal_Air_Maroc.svg'></img>
         <input className="auth--input" type="text" onChange={(e)=>{setUsername(e.target.value)}}></input>
         <input className="auth--input" type="text" onChange={(e)=>{setPassword(e.target.value)}}></input>
-        <button className="auth--submit" onClick={submit} >Confirmer</button>,
-        <h1>{response}</h1>,
+        <button className="auth--submit" onClick={submit} >Confirmer</button>
+        <h1>{response}</h1>
     </div>]
     )
     
@@ -56,12 +56,12 @@ Axios.post('http://localhost:3002/api/login',{
    
     return(
 
-        <div className="container">,
+        <div className="container">
         <img className="logo" src='https://upload.wikimedia.org/wikipedia/commons/b/bf/Logo_Royal_Air_Maroc.svg'></img>
         <input className="auth--input" type="text" onChange={(e)=>{setUsername(e.target.value)}}></input>
         <input className="auth--input" type="text" onChange={(e)=>{setPassword(e.target.value)}}></input>
-        <button className="auth--submit" onClick={submit} >Confirmer</button>,
-        <h1>{response}</h1>,
+        <button className="auth--submit" onClick={submit} >Confirmer</button>
+        <h1>{response}</h1>
      
     </div>
        
